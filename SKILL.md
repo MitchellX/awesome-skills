@@ -1,6 +1,7 @@
-| name | description |
-|------|-------------|
-| diff-review | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings. |
+---
+name: diff-review
+description: Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings.
+---
 
 # Diff Review - Multi-Agent Code Review
 
