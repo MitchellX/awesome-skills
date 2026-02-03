@@ -10,13 +10,18 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 | Skill | Description |
 |-------|-------------|
 | [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel |
+| [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
 
 ## Installation
 
 Install any skill using the skills.sh CLI:
 
 ```bash
-npx skills add https://github.com/mitchellx/diff-reviewer-multi-agent --skill diff-review
+# Install diff-reviewer-multi-agent from this repo
+npx skills add https://github.com/mitchellx/awesome-skills --skill diff-review
+
+# Install git-commit from GitHub official repo
+npx skills add https://github.com/github/awesome-copilot --skill git-commit
 ```
 
 Or manually copy the skill folder to your Claude Code skills directory.
