@@ -101,19 +101,13 @@ diff-reviewer-multi-agent/
 ### Via skills.sh (Recommended)
 
 ```bash
-npx skills add https://github.com/YOUR_USERNAME/diff-reviewer-multi-agent
-```
-
-### Via Claude Code
-
-```bash
-claude skills add github:YOUR_USERNAME/diff-reviewer-multi-agent
+npx skills add https://github.com/mitchellx/diff-reviewer-multi-agent --skill diff-review
 ```
 
 ### Manual Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/diff-reviewer-multi-agent.git ~/.claude/skills/diff-reviewer-multi-agent
+git clone https://github.com/mitchellx/diff-reviewer-multi-agent.git ~/.claude/skills/diff-reviewer-multi-agent
 ```
 
 ## Usage

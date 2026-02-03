@@ -16,11 +16,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 Install any skill using the skills.sh CLI:
 
 ```bash
-# Install a specific skill
-skills install <github-url>/skills/<skill-name>
-
-# Example
-skills install https://github.com/MitchellX/awesome-skills/skills/diff-reviewer-multi-agent
+npx skills add https://github.com/mitchellx/diff-reviewer-multi-agent --skill diff-review
 ```
 
 Or manually copy the skill folder to your Claude Code skills directory.
