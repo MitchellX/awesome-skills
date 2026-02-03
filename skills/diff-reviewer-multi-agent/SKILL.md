@@ -187,12 +187,28 @@ The Coordinator will:
 
 ### Step 6: Output Report
 
-Output the final report to terminal.
+Output the final report to terminal **and** save to a markdown file.
+
+```
+# Generate filename with timestamp
+REPORT_FILE="diff-review-$(date +%Y%m%d-%H%M%S).md"
+
+# Output to terminal
+Print the full report
+
+# Save to file
+Write the same report content to $REPORT_FILE
+
+# Notify user
+Print: "📄 Report saved to: $REPORT_FILE"
+```
 
 Report includes:
 - Summary table (severity counts)
 - Merged issues with source attribution
 - Raw outputs in collapsible sections
+
+**File naming convention:** `diff-review-YYYYMMDD.md` (e.g., `diff-review-20250203.md`)
 
 ---
 
