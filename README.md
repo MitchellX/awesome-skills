@@ -11,6 +11,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 |-------|-------------|
 | [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel |
 | [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
+| [upload-skills](./skills/upload-skills/) | Upload a local skill to the awesome-skills GitHub repo with auto-generated README |
 | [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
 
 ## Installation
@@ -23,6 +24,9 @@ npx skills add https://github.com/mitchellx/awesome-skills --skill diff-review
 
 # Install techdebt
 npx skills add https://github.com/mitchellx/awesome-skills --skill techdebt
+
+# Install upload-skills
+npx skills add https://github.com/mitchellx/awesome-skills --skill upload-skills
 
 # Install git-commit from GitHub official repo
 npx skills add https://github.com/github/awesome-copilot --skill git-commit
@@ -43,8 +47,11 @@ awesome-skills/
     │   ├── expertise/                     # Domain-specific prompts
     │   ├── reviewers/                     # Reviewer role definitions
     │   └── templates/                     # Output templates
-    └── techdebt/                          # Technical debt auditor skill
-        └── SKILL.md                       # Skill definition
+    ├── techdebt/                          # Technical debt auditor skill
+    │   └── SKILL.md                       # Skill definition
+    └── upload-skills/                     # Skill upload workflow
+        ├── SKILL.md                       # Skill definition
+        └── README.md                      # Skill documentation
 ```
 
 ## Creating New Skills
