@@ -10,6 +10,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 | Skill | Description |
 |-------|-------------|
 | [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel |
+| [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
 | [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
 
 ## Installation
@@ -17,8 +18,11 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 Install any skill using the skills.sh CLI:
 
 ```bash
-# Install diff-reviewer-multi-agent from this repo
+# Install diff-reviewer-multi-agent
 npx skills add https://github.com/mitchellx/awesome-skills --skill diff-review
+
+# Install techdebt
+npx skills add https://github.com/mitchellx/awesome-skills --skill techdebt
 
 # Install git-commit from GitHub official repo
 npx skills add https://github.com/github/awesome-copilot --skill git-commit
@@ -33,12 +37,14 @@ awesome-skills/
 ├── README.md                              # This file
 ├── LICENSE
 └── skills/
-    └── diff-reviewer-multi-agent/         # Multi-agent code review skill
-        ├── SKILL.md                       # Skill definition
-        ├── README.md                      # Skill documentation
-        ├── expertise/                     # Domain-specific prompts
-        ├── reviewers/                     # Reviewer role definitions
-        └── templates/                     # Output templates
+    ├── diff-reviewer-multi-agent/         # Multi-agent code review skill
+    │   ├── SKILL.md                       # Skill definition
+    │   ├── README.md                      # Skill documentation
+    │   ├── expertise/                     # Domain-specific prompts
+    │   ├── reviewers/                     # Reviewer role definitions
+    │   └── templates/                     # Output templates
+    └── techdebt/                          # Technical debt auditor skill
+        └── SKILL.md                       # Skill definition
 ```
 
 ## Creating New Skills
