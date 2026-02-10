@@ -25,10 +25,12 @@ Installed plugins from [claude-plugins-official](https://github.com/anthropics/c
 | ralph-loop | latest | Iterative development loop |
 | superpowers | v4.2.0 | Extended Claude capabilities |
 | commit-commands | latest | Git commit helpers |
-| Notion | v0.1.0 | Notion integration |
 | claude-md-management | v1.0.0 | CLAUDE.md file management |
+| code-review | latest | Code review workflow |
 
 See [claude-plugins/](./claude-plugins/) for backup files.
+
+*Last updated: 2026-02-10*
 
 ## Installation
 

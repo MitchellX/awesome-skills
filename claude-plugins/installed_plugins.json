@@ -51,16 +51,6 @@
         "gitCommitSha": "236752ad9ab36029b648bfd94707944760242768"
       }
     ],
-    "Notion@claude-plugins-official": [
-      {
-        "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/Notion/0.1.0",
-        "version": "0.1.0",
-        "installedAt": "2026-02-08T16:29:15.354Z",
-        "lastUpdated": "2026-02-08T16:29:15.354Z",
-        "gitCommitSha": "9847f2aa1a15f25df35ed1fb7b4557dbb60cd651"
-      }
-    ],
     "claude-md-management@claude-plugins-official": [
       {
         "scope": "user",
@@ -68,6 +58,16 @@
         "version": "1.0.0",
         "installedAt": "2026-02-08T16:38:46.254Z",
         "lastUpdated": "2026-02-08T16:38:46.254Z",
+        "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
+      }
+    ],
+    "code-review@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/code-review/2cd88e7947b7",
+        "version": "2cd88e7947b7",
+        "installedAt": "2026-02-10T03:22:34.676Z",
+        "lastUpdated": "2026-02-10T03:22:34.676Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ]
