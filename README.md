@@ -14,6 +14,22 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 | [upload-skills](./skills/upload-skills/) | Upload a local skill to the awesome-skills GitHub repo with auto-generated README |
 | [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
 
+## Claude Plugins Backup
+
+Installed plugins from [claude-plugins-official](https://github.com/anthropics/claude-plugins) registry:
+
+| Plugin | Version | Description |
+|--------|---------|-------------|
+| context7 | latest | Context management for large codebases |
+| feature-dev | latest | Feature development workflow |
+| ralph-loop | latest | Iterative development loop |
+| superpowers | v4.2.0 | Extended Claude capabilities |
+| commit-commands | latest | Git commit helpers |
+| Notion | v0.1.0 | Notion integration |
+| claude-md-management | v1.0.0 | CLAUDE.md file management |
+
+See [claude-plugins/](./claude-plugins/) for backup files.
+
 ## Installation
 
 Install any skill using the skills.sh CLI:
