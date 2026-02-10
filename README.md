@@ -10,6 +10,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 | Skill | Description |
 |-------|-------------|
 | [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel |
+| [notion-organizer](./skills/notion-organizer/) | Automatically organize and optimize Notion page content given a URL |
 | [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
 | [upload-skills](./skills/upload-skills/) | Upload a local skill to the awesome-skills GitHub repo with auto-generated README |
 | [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
