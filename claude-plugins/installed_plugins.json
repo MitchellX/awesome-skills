@@ -34,10 +34,10 @@
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.0",
-        "version": "4.3.0",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/superpowers/4.2.0",
+        "version": "4.2.0",
         "installedAt": "2026-02-06T15:56:49.843Z",
-        "lastUpdated": "2026-02-13T14:35:50.986Z",
+        "lastUpdated": "2026-02-06T15:56:49.843Z",
         "gitCommitSha": "a98c5dfc9de0df5318f4980d91d24780a566ee60"
       }
     ],
