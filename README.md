@@ -33,6 +33,17 @@ See [claude-plugins/](./claude-plugins/) for backup files.
 
 *Last updated: 2026-02-16*
 
+## OpenClaw Workspace Skills
+
+Skills running on the [OpenClaw](https://openclaw.com) agent platform:
+
+| Skill | Description |
+|-------|-------------|
+| [notion-writer](./openclaw-skills/notion-writer/) | Create, read, update, and query Notion pages with rich content blocks |
+| [unity-claude](./openclaw-skills/unity-claude/) | Dispatch Claude Code tasks to Unity HPC via SSH with background execution |
+
+See [openclaw-skills/](./openclaw-skills/) for skill files.
+
 ## Installation
 
 Install any skill using the skills.sh CLI:
@@ -57,25 +68,24 @@ Or manually copy the skill folder to your Claude Code skills directory.
 
 ```
 awesome-skills/
-├── README.md                              # This file
+├── README.md
 ├── LICENSE
-└── skills/
-    ├── diff-reviewer-multi-agent/         # Multi-agent code review skill
-    │   ├── SKILL.md                       # Skill definition
-    │   ├── README.md                      # Skill documentation
-    │   ├── expertise/                     # Domain-specific prompts
-    │   ├── reviewers/                     # Reviewer role definitions
-    │   └── templates/                     # Output templates
-    ├── notion-organizer/                   # Notion page organizer skill
-    │   ├── SKILL.md                       # Skill definition
-    │   ├── references/                    # API patterns reference
-    │   ├── assets/                        # Supporting assets
-    │   └── scripts/                       # Helper scripts
-    ├── techdebt/                          # Technical debt auditor skill
-    │   └── SKILL.md                       # Skill definition
-    └── upload-skills/                     # Skill upload workflow
-        ├── SKILL.md                       # Skill definition
-        └── README.md                      # Skill documentation
+├── skills/                                # Claude Code skills
+│   ├── diff-reviewer-multi-agent/
+│   ├── notion-organizer/
+│   ├── techdebt/
+│   └── upload-skills/
+├── openclaw-skills/                       # OpenClaw platform skills
+│   ├── notion-writer/
+│   │   ├── SKILL.md
+│   │   ├── scripts/notion_api.py
+│   │   └── references/block-examples.json
+│   └── unity-claude/
+│       ├── SKILL.md
+│       └── references/architecture.md
+└── claude-plugins/                        # Plugin backups
+    ├── installed_plugins.json
+    └── known_marketplaces.json
 ```
 
 ## Creating New Skills
