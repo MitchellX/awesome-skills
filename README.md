@@ -24,14 +24,14 @@ Installed plugins from [claude-plugins-official](https://github.com/anthropics/c
 | context7 | latest | Context management for large codebases |
 | feature-dev | latest | Feature development workflow |
 | ralph-loop | latest | Iterative development loop |
-| superpowers | v4.2.0 | Extended Claude capabilities |
+| superpowers | v4.3.0 | Extended Claude capabilities |
 | commit-commands | latest | Git commit helpers |
 | claude-md-management | v1.0.0 | CLAUDE.md file management |
 | code-review | latest | Code review workflow |
 
 See [claude-plugins/](./claude-plugins/) for backup files.
 
-*Last updated: 2026-02-10*
+*Last updated: 2026-02-16*
 
 ## Installation
 
@@ -66,6 +66,11 @@ awesome-skills/
     │   ├── expertise/                     # Domain-specific prompts
     │   ├── reviewers/                     # Reviewer role definitions
     │   └── templates/                     # Output templates
+    ├── notion-organizer/                   # Notion page organizer skill
+    │   ├── SKILL.md                       # Skill definition
+    │   ├── references/                    # API patterns reference
+    │   ├── assets/                        # Supporting assets
+    │   └── scripts/                       # Helper scripts
     ├── techdebt/                          # Technical debt auditor skill
     │   └── SKILL.md                       # Skill definition
     └── upload-skills/                     # Skill upload workflow
