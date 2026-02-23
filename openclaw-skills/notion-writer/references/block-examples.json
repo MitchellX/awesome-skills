@@ -6,5 +6,36 @@
   {"object": "block", "type": "code", "code": {"rich_text": [{"text": {"content": "print('hello')"}}], "language": "python"}},
   {"object": "block", "type": "quote", "quote": {"rich_text": [{"text": {"content": "A blockquote"}}]}},
   {"object": "block", "type": "divider", "divider": {}},
-  {"object": "block", "type": "toggle", "toggle": {"rich_text": [{"text": {"content": "Click to expand"}}], "children": [{"object": "block", "type": "paragraph", "paragraph": {"rich_text": [{"text": {"content": "Hidden content"}}]}}]}}
+  {"object": "block", "type": "toggle", "toggle": {"rich_text": [{"text": {"content": "Click to expand"}}], "children": [{"object": "block", "type": "paragraph", "paragraph": {"rich_text": [{"text": {"content": "Hidden content"}}]}}]}},
+  {
+    "object": "block",
+    "type": "table",
+    "table": {
+      "table_width": 3,
+      "has_column_header": true,
+      "has_row_header": false,
+      "children": [
+        {
+          "type": "table_row",
+          "table_row": {
+            "cells": [
+              [{"type": "text", "text": {"content": "Header 1"}}],
+              [{"type": "text", "text": {"content": "Header 2"}}],
+              [{"type": "text", "text": {"content": "Header 3"}}]
+            ]
+          }
+        },
+        {
+          "type": "table_row",
+          "table_row": {
+            "cells": [
+              [{"type": "text", "text": {"content": "Cell 1"}}],
+              [{"type": "text", "text": {"content": "Cell 2"}}],
+              [{"type": "text", "text": {"content": "Cell 3"}}]
+            ]
+          }
+        }
+      ]
+    }
+  }
 ]

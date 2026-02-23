@@ -7,7 +7,7 @@ description: Create, read, update, and query Notion pages. Triggers on /notion c
 
 ## Config
 
-- **Token**: `$NOTION_TOKEN`
+- **Token**: `REDACTED_NOTION_TOKEN`
 - **Default Database**: `2f9871232f4580b6bf51e923c03cb30f` (AI tool)
 - **API Version**: `2022-06-28`
 - **Base URL**: `https://api.notion.com/v1`
@@ -66,8 +66,11 @@ When creating rich content, build a JSON array of Notion blocks. Common types:
 - `quote` — Blockquotes
 - `divider` — Horizontal divider
 - `toggle` — Collapsible sections
+- `table` — Tables with rows and cells (use `has_column_header: true` for header row)
 
-See `references/block-examples.json` for templates.
+**⚠️ Tables for experiment results:** Always prefer `table` blocks over bullet lists for showing experiment data, benchmarks, comparisons, and metrics.
+
+See `references/block-examples.json` for templates (includes table example).
 
 ## URL Parsing
 

@@ -4,50 +4,50 @@
     "context7@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/context7/2cd88e7947b7",
-        "version": "2cd88e7947b7",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/context7/aa296ec81e8c",
+        "version": "aa296ec81e8c",
         "installedAt": "2026-02-06T15:53:39.160Z",
-        "lastUpdated": "2026-02-06T23:49:58.003Z",
+        "lastUpdated": "2026-02-20T17:53:38.160Z",
         "gitCommitSha": "236752ad9ab36029b648bfd94707944760242768"
       }
     ],
     "feature-dev@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/feature-dev/2cd88e7947b7",
-        "version": "2cd88e7947b7",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/feature-dev/aa296ec81e8c",
+        "version": "aa296ec81e8c",
         "installedAt": "2026-02-06T15:56:22.922Z",
-        "lastUpdated": "2026-02-06T23:49:58.064Z",
+        "lastUpdated": "2026-02-20T17:53:38.332Z",
         "gitCommitSha": "236752ad9ab36029b648bfd94707944760242768"
       }
     ],
     "ralph-loop@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/ralph-loop/2cd88e7947b7",
-        "version": "2cd88e7947b7",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/ralph-loop/aa296ec81e8c",
+        "version": "aa296ec81e8c",
         "installedAt": "2026-02-06T15:56:37.755Z",
-        "lastUpdated": "2026-02-06T23:49:58.134Z",
+        "lastUpdated": "2026-02-20T17:53:38.375Z",
         "gitCommitSha": "236752ad9ab36029b648bfd94707944760242768"
       }
     ],
     "superpowers@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.0",
-        "version": "4.3.0",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.1",
+        "version": "4.3.1",
         "installedAt": "2026-02-06T15:56:49.843Z",
-        "lastUpdated": "2026-02-13T14:35:50.986Z",
+        "lastUpdated": "2026-02-21T23:19:53.170Z",
         "gitCommitSha": "a98c5dfc9de0df5318f4980d91d24780a566ee60"
       }
     ],
     "commit-commands@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/commit-commands/2cd88e7947b7",
-        "version": "2cd88e7947b7",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/commit-commands/aa296ec81e8c",
+        "version": "aa296ec81e8c",
         "installedAt": "2026-02-06T15:58:41.857Z",
-        "lastUpdated": "2026-02-06T23:49:58.181Z",
+        "lastUpdated": "2026-02-20T17:53:38.267Z",
         "gitCommitSha": "236752ad9ab36029b648bfd94707944760242768"
       }
     ],
@@ -64,10 +64,10 @@
     "code-review@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/code-review/2cd88e7947b7",
-        "version": "2cd88e7947b7",
+        "installPath": "/home/mingcanxiang_umass_edu/.claude/plugins/cache/claude-plugins-official/code-review/aa296ec81e8c",
+        "version": "aa296ec81e8c",
         "installedAt": "2026-02-10T03:22:34.676Z",
-        "lastUpdated": "2026-02-10T03:22:34.676Z",
+        "lastUpdated": "2026-02-20T17:53:38.232Z",
         "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
       }
     ]

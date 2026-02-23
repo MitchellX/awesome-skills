@@ -1,4 +1,3 @@
-import os
 #!/usr/bin/env python3
 """Notion API client for OpenClaw skill.
 
@@ -16,7 +15,7 @@ import re
 import sys
 import requests
 
-TOKEN = os.environ.get("NOTION_TOKEN", "YOUR_NOTION_TOKEN_HERE")
+TOKEN = "REDACTED_NOTION_TOKEN"
 DEFAULT_DB = "2f9871232f4580b6bf51e923c03cb30f"
 API_VERSION = "2022-06-28"
 BASE_URL = "https://api.notion.com/v1"
@@ -125,6 +124,17 @@ def cmd_read(args):
         elif btype == "code":
             lang = data.get("language", "")
             print(f"```{lang}\n{text}\n```")
+        elif btype == "table":
+            # Fetch table children (rows)
+            table_blocks = api_request("GET", f"blocks/{block['id']}/children")
+            for row in table_blocks.get("results", []):
+                if row["type"] == "table_row":
+                    cells = row["table_row"]["cells"]
+                    row_text = " | ".join(
+                        "".join(t.get("plain_text", "") for t in cell)
+                        for cell in cells
+                    )
+                    print(f"  | {row_text} |")
         elif btype == "divider":
             print("---")
         else:
