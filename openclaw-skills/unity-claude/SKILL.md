@@ -217,16 +217,50 @@ ssh unity "cd /path && python -m pytest 2>&1 | tail -20"
 
 ### Autonomous Prompt Template (Superpower)
 
-When dispatching with Superpower, prepend this to the prompt (do NOT use `--ralph`):
+When dispatching with Superpower, prepend this to the prompt (do NOT use `--ralph`).
+
+**Step 1**: Pick the `TASK TYPE` that best matches the task:
+
+| TASK TYPE | Superpower Skill to Load |
+|---|---|
+| `code-review` | `Skill(superpowers:requesting-code-review)` — dispatch code-reviewer subagent |
+| `review-feedback` | `Skill(superpowers:receiving-code-review)` — verify feedback before implementing |
+| `brainstorm` | `Skill(superpowers:brainstorm)` — explore requirements/design before coding |
+| `plan` | `Skill(superpowers:write-plan)` — create detailed implementation plan |
+| `execute-plan` | `Skill(superpowers:execute-plan)` — execute plan in batches |
+| `implement` | `Skill(superpowers:brainstorm)` first, then implement |
+
+**Step 2**: Use this template (fill in `{task_type}` and `{actual_prompt}`):
 
 ```
 AUTONOMOUS MODE: You are running without a human in the loop.
-- For brainstorming: Propose your recommended approach, approve it yourself, proceed to implementation. Do NOT wait for user approval.
-- For executing-plans: Execute ALL batches without stopping for feedback. Only stop on genuine errors/blockers.
-- For all /superpower skills: Treat "ask the user" steps as "make your best judgment and proceed".
-- Use /superpower skills as normal but skip all human confirmation gates.
-- Use Agent Teams: create worker teammates for parallel tasks + 1 reviewer teammate for internal review.
+
+TASK TYPE: {task_type}
+
+SKILL ROUTING — You MUST load the correct superpower skill FIRST based on TASK TYPE:
+- code-review → Load Skill(superpowers:requesting-code-review), dispatch code-reviewer subagent
+- review-feedback → Load Skill(superpowers:receiving-code-review) before implementing changes
+- brainstorm / implement → Load Skill(superpowers:brainstorm) before any creative work
+- plan → Load Skill(superpowers:write-plan) to create detailed plan
+- execute-plan → Load Skill(superpowers:execute-plan) to execute in batches
+
+AUTONOMY RULES:
+- Skip ALL human confirmation gates in skills
+- Approve your own proposals and proceed to implementation
+- Execute ALL batches without stopping for feedback
+- Only stop on genuine errors/blockers
+- Use Agent Teams when the skill suggests it (worker teammates for parallel tasks + reviewer for internal review)
 
 TASK:
-{actual prompt here}
+{actual_prompt}
+```
+
+**Example** (code review dispatch):
+```bash
+dispatch -p "AUTONOMOUS MODE: ...
+TASK TYPE: code-review
+SKILL ROUTING — ...
+TASK:
+Review commit abc1234 for correctness and safety.
+" -n "review-task" -a "code2" -w "~/LightningDiT" --bypass --new
 ```

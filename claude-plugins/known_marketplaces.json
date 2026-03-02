@@ -5,6 +5,14 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "/home/mingcanxiang_umass_edu/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-02-22T23:20:07.873Z"
+    "lastUpdated": "2026-03-02T02:49:05.768Z"
+  },
+  "thedotmack": {
+    "source": {
+      "source": "github",
+      "repo": "thedotmack/claude-mem"
+    },
+    "installLocation": "/home/mingcanxiang_umass_edu/.claude/plugins/marketplaces/thedotmack",
+    "lastUpdated": "2026-02-24T01:08:58.636Z"
   }
 }

@@ -19,19 +19,20 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 
 Installed plugins from [claude-plugins-official](https://github.com/anthropics/claude-plugins) registry:
 
-| Plugin | Version | Description |
-|--------|---------|-------------|
-| context7 | latest | Context management for large codebases |
-| feature-dev | latest | Feature development workflow |
-| ralph-loop | latest | Iterative development loop |
-| superpowers | v4.3.0 | Extended Claude capabilities |
-| commit-commands | latest | Git commit helpers |
-| claude-md-management | v1.0.0 | CLAUDE.md file management |
-| code-review | latest | Code review workflow |
+| Plugin | Version | Source | Description |
+|--------|---------|--------|-------------|
+| context7 | latest | claude-plugins-official | Context management for large codebases |
+| feature-dev | latest | claude-plugins-official | Feature development workflow |
+| ralph-loop | latest | claude-plugins-official | Iterative development loop |
+| superpowers | v4.3.1 | claude-plugins-official | Extended Claude capabilities |
+| commit-commands | latest | claude-plugins-official | Git commit helpers |
+| claude-md-management | v1.0.0 | claude-plugins-official | CLAUDE.md file management |
+| code-review | latest | claude-plugins-official | Code review workflow |
+| claude-mem | v10.4.0 | thedotmack | Persistent memory management for Claude |
 
 See [claude-plugins/](./claude-plugins/) for backup files.
 
-*Last updated: 2026-02-16*
+*Last updated: 2026-03-02*
 
 ## OpenClaw Workspace Skills
 
