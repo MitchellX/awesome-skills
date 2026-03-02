@@ -9,8 +9,10 @@ A multi-agent code review skill that leverages **Gemini**, **Codex**, and **Clau
 
 - **Multi-Agent Review**: Three AI reviewers analyze your code simultaneously
 - **Parallel Execution**: All reviewers run in parallel for faster results
+- **Commit Review**: Review specific commits by hash (e.g., `/diff-review abc1234`)
 - **Smart Merging**: Coordinator merges similar issues while preserving unique findings
 - **Auto-Expertise Detection**: Automatically detects code type (training, inference, etc.) and injects relevant prompts
+- **Report Saving**: Automatically saves review report as a markdown file
 - **Extensible**: Add new expertise by simply dropping markdown files
 - **Single Reviewer Mode**: Use `--reviewer` flag to select a specific reviewer
 
@@ -112,7 +114,7 @@ git clone https://github.com/mitchellx/diff-reviewer-multi-agent.git ~/.claude/s
 
 ## Usage
 
-### Multi-Agent Review (Default)
+### Review Uncommitted Changes (Default)
 
 ```bash
 # Review all uncommitted changes with all 3 reviewers
@@ -120,6 +122,17 @@ git clone https://github.com/mitchellx/diff-reviewer-multi-agent.git ~/.claude/s
 
 # Or explicitly
 /diff-review --reviewer=all
+```
+
+### Review a Specific Commit
+
+```bash
+# Review by commit hash (full or short)
+/diff-review 599df3c
+/diff-review abc1234567890
+
+# Combine with reviewer selection
+/diff-review 599df3c --reviewer=gemini
 ```
 
 ### Single Reviewer
@@ -170,6 +183,16 @@ To add new expertise (e.g., for distributed training code):
 ```
 
 3. Done! The skill will auto-detect and apply your new expertise.
+
+## Output
+
+The review report is:
+1. **Printed to terminal** — full report visible immediately
+2. **Saved to a markdown file** — automatically in the current working directory
+
+File naming:
+- Commit review: `diff-review-<short-hash>-YYYYMMDD-HHMMSS.md`
+- Uncommitted changes: `diff-review-YYYYMMDD-HHMMSS.md`
 
 ## Report Example
 

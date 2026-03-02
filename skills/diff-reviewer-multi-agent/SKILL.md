@@ -10,11 +10,12 @@ Review code diffs using multiple AI reviewers in parallel, then merge findings i
 ## Usage
 
 ```
-/diff-review [--reviewer=<gemini|codex|claude|auto|all>]
+/diff-review [<commit-hash>] [--reviewer=<gemini|codex|claude|auto|all>]
 ```
 
 ### Parameters
 
+- `<commit-hash>` (optional): Review a specific commit instead of uncommitted changes. Accepts full or short hash.
 - `--reviewer` (optional): Select reviewer mode
   - `gemini`: Use Gemini CLI only
   - `codex`: Use Codex CLI only
@@ -50,9 +51,15 @@ which codex || echo "CODEX_NOT_FOUND"
 
 ---
 
-### Step 1: Parse --reviewer Parameter
+### Step 1: Parse Parameters
 
 ```
+IF <commit-hash> is provided:
+    Set REVIEW_MODE = "commit"
+    Set COMMIT_HASH = <commit-hash>
+ELSE:
+    Set REVIEW_MODE = "uncommitted"
+
 IF --reviewer is specified:
     IF --reviewer=auto:
         Read reviewers/auto-select.md and follow its logic
@@ -69,7 +76,31 @@ ELSE:
 
 ### Step 2: Get Git Diff
 
-Run these commands to gather diff information:
+#### If REVIEW_MODE = "commit":
+
+```bash
+# Verify the commit exists
+git rev-parse --verify $COMMIT_HASH
+
+# Get commit metadata
+git --no-pager log -1 --format="%H%n%s%n%an%n%ai" $COMMIT_HASH
+
+# Get diff stats for the commit
+git --no-pager diff --stat ${COMMIT_HASH}~1 $COMMIT_HASH
+
+# Get full diff for analysis
+git --no-pager diff ${COMMIT_HASH}~1 $COMMIT_HASH
+
+# Count changed files
+git --no-pager diff --name-only ${COMMIT_HASH}~1 $COMMIT_HASH | wc -l
+
+# Count total changed lines
+git --no-pager diff --numstat ${COMMIT_HASH}~1 $COMMIT_HASH | awk '{added+=$1; removed+=$2} END {print added+removed}'
+```
+
+**If commit hash is invalid:** Report "❌ Invalid commit hash: $COMMIT_HASH" and stop.
+
+#### If REVIEW_MODE = "uncommitted":
 
 ```bash
 # Get diff stats (staged + unstaged)
@@ -113,13 +144,13 @@ PARALLEL:
     Task 1: Run Gemini Review
         - Load reviewers/gemini-role.md
         - Inject matched expertise prompts
-        - Execute: git --no-pager diff HEAD | gemini -p "[PROMPT]"
+        - Execute: git --no-pager diff [TARGET] | gemini -p "[PROMPT]"
         - Store result as GEMINI_RESULT
 
     Task 2: Run Codex Review
         - Load reviewers/codex-role.md
         - Inject matched expertise prompts
-        - Execute: codex review --uncommitted
+        - Execute: codex review (with appropriate diff)
         - Store result as CODEX_RESULT
 
     Task 3: Run Claude Review
@@ -149,7 +180,7 @@ STOP (skip Step 5)
 For Gemini:
 ```bash
 # Pipe diff to Gemini with review prompt
-git --no-pager diff HEAD | gemini -p "[FULL_PROMPT]"
+git --no-pager diff [TARGET] | gemini -p "[FULL_PROMPT]"
 ```
 
 For Codex:
@@ -185,30 +216,42 @@ The Coordinator will:
 
 ---
 
-### Step 6: Output Report
+### Step 6: Save Report (MANDATORY)
 
-Output the final report to terminal **and** save to a markdown file.
+**⚠️ This step is NOT optional. You MUST save the report to a file.**
 
-```
-# Generate filename with timestamp
+```bash
+# Generate filename
+# For commit review:
+REPORT_FILE="diff-review-$(echo $COMMIT_HASH | cut -c1-7)-$(date +%Y%m%d-%H%M%S).md"
+# For uncommitted changes:
 REPORT_FILE="diff-review-$(date +%Y%m%d-%H%M%S).md"
+```
 
-# Output to terminal
-Print the full report
+**You MUST do BOTH of the following:**
 
-# Save to file
-Write the same report content to $REPORT_FILE
+1. **Output the full report to terminal**
+2. **Write the report to `$REPORT_FILE` in the current working directory**
 
-# Notify user
-Print: "📄 Report saved to: $REPORT_FILE"
+```bash
+# Write report to file — THIS IS REQUIRED, DO NOT SKIP
+cat << 'EOF' > "$REPORT_FILE"
+[full report content here]
+EOF
+
+# Confirm to user
+echo "📄 Report saved to: $REPORT_FILE"
 ```
 
 Report includes:
+- Review target (commit hash + message, or "uncommitted changes")
 - Summary table (severity counts)
 - Merged issues with source attribution
 - Raw outputs in collapsible sections
 
-**File naming convention:** `diff-review-YYYYMMDD.md` (e.g., `diff-review-20250203.md`)
+**File naming convention:**
+- Commit review: `diff-review-<short-hash>-YYYYMMDD-HHMMSS.md`
+- Uncommitted: `diff-review-YYYYMMDD-HHMMSS.md`
 
 ---
 
