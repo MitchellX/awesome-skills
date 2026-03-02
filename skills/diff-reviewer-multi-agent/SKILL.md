@@ -144,13 +144,13 @@ PARALLEL:
     Task 1: Run Gemini Review
         - Load reviewers/gemini-role.md
         - Inject matched expertise prompts
-        - Execute: git --no-pager diff [TARGET] | gemini -p "[PROMPT]"
+        - Execute: see CLI Commands below
         - Store result as GEMINI_RESULT
 
     Task 2: Run Codex Review
         - Load reviewers/codex-role.md
         - Inject matched expertise prompts
-        - Execute: codex review (with appropriate diff)
+        - Execute: see CLI Commands below
         - Store result as CODEX_RESULT
 
     Task 3: Run Claude Review
@@ -180,13 +180,25 @@ STOP (skip Step 5)
 For Gemini:
 ```bash
 # Pipe diff to Gemini with review prompt
-git --no-pager diff [TARGET] | gemini -p "[FULL_PROMPT]"
+# For uncommitted changes:
+git --no-pager diff HEAD | gemini -p "[FULL_PROMPT]"
+# For specific commit:
+git --no-pager diff ${COMMIT_HASH}~1 $COMMIT_HASH | gemini -p "[FULL_PROMPT]"
 ```
 
 For Codex:
 ```bash
-# Use dedicated 'review' subcommand
-codex review --uncommitted
+# ⚠️ codex CLI does NOT accept piped input or -p flag for prompts!
+# Use the dedicated 'review' subcommand with native flags:
+
+# For uncommitted changes:
+codex review --uncommitted "[REVIEW_PROMPT]"
+
+# For specific commit:
+codex review --commit $COMMIT_HASH "[REVIEW_PROMPT]"
+
+# For changes against a branch:
+codex review --base main "[REVIEW_PROMPT]"
 ```
 
 For Claude:
