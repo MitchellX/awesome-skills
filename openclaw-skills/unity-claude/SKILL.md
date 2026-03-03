@@ -30,6 +30,7 @@ All at `/home/ubuntu/.openclaw/workspace/scripts/claude-code/`
 | `--plan` | **Plan Mode**: CC creates IMPLEMENTATION_PLAN.md before coding |
 | `--progress` | **PROGRESS.md**: CC logs lessons learned after task completion |
 | `--ralph N` | **Ralph Loop**: Run N iterations, each with fresh context |
+| `--worktree NAME` | Git worktree isolation (see `references/git-worktree.md`) |
 | `--clean` | Clear saved session for this task name |
 | `--clean-all` | Clear all saved sessions |
 
@@ -200,67 +201,4 @@ ssh unity "cd /path && python -m pytest 2>&1 | tail -20"
 
 ---
 
-## Superpower / Agent Teams (按需启用)
-
-> **默认**: Ralph Loop（机械迭代任务，有明确完成条件）
-> **Superpower**: 当 Mitchell 的 prompt 里明确提到 "superpower" / "agent teams" 时启用
-> 两者互斥 — 用 Superpower 时不加 `--ralph`，用 Ralph 时不加 Superpower prompt
-
-### 何时用哪个
-
-| 场景 | 用什么 |
-|---|---|
-| 默认 / 没特别说明 | Ralph Loop (`--ralph N`) |
-| Mitchell prompt 提到 superpower / agent teams | Superpower（无 `--ralph`） |
-| 创意决策、多专家协作 | Superpower |
-| 机械迭代、有 plan 逐步执行 | Ralph Loop |
-
-### Autonomous Prompt Template (Superpower)
-
-When dispatching with Superpower, prepend this to the prompt (do NOT use `--ralph`).
-
-**Step 1**: Pick the `TASK TYPE` that best matches the task:
-
-| TASK TYPE | Superpower Skill to Load |
-|---|---|
-| `code-review` | `Skill(superpowers:requesting-code-review)` — dispatch code-reviewer subagent |
-| `review-feedback` | `Skill(superpowers:receiving-code-review)` — verify feedback before implementing |
-| `brainstorm` | `Skill(superpowers:brainstorm)` — explore requirements/design before coding |
-| `plan` | `Skill(superpowers:write-plan)` — create detailed implementation plan |
-| `execute-plan` | `Skill(superpowers:execute-plan)` — execute plan in batches |
-| `implement` | `Skill(superpowers:brainstorm)` first, then implement |
-
-**Step 2**: Use this template (fill in `{task_type}` and `{actual_prompt}`):
-
-```
-AUTONOMOUS MODE: You are running without a human in the loop.
-
-TASK TYPE: {task_type}
-
-SKILL ROUTING — You MUST load the correct superpower skill FIRST based on TASK TYPE:
-- code-review → Load Skill(superpowers:requesting-code-review), dispatch code-reviewer subagent
-- review-feedback → Load Skill(superpowers:receiving-code-review) before implementing changes
-- brainstorm / implement → Load Skill(superpowers:brainstorm) before any creative work
-- plan → Load Skill(superpowers:write-plan) to create detailed plan
-- execute-plan → Load Skill(superpowers:execute-plan) to execute in batches
-
-AUTONOMY RULES:
-- Skip ALL human confirmation gates in skills
-- Approve your own proposals and proceed to implementation
-- Execute ALL batches without stopping for feedback
-- Only stop on genuine errors/blockers
-- Use Agent Teams when the skill suggests it (worker teammates for parallel tasks + reviewer for internal review)
-
-TASK:
-{actual_prompt}
-```
-
-**Example** (code review dispatch):
-```bash
-dispatch -p "AUTONOMOUS MODE: ...
-TASK TYPE: code-review
-SKILL ROUTING — ...
-TASK:
-Review commit abc1234 for correctness and safety.
-" -n "review-task" -a "code2" -w "~/LightningDiT" --bypass --new
-```
+> **Superpower / Agent Teams**: 当 Mitchell 明确提到 "superpower" / "agent teams" 时启用，详见 `references/superpower.md`。默认走 Ralph Loop。

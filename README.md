@@ -33,7 +33,7 @@ Installed plugins from [claude-plugins-official](https://github.com/anthropics/c
 
 See [claude-plugins/](./claude-plugins/) for backup files.
 
-*Last updated: 2026-03-02*
+*Last updated: 2026-03-03*
 
 ## OpenClaw Workspace Skills
 
@@ -42,7 +42,7 @@ Skills running on the [OpenClaw](https://openclaw.com) agent platform:
 | Skill | Description |
 |-------|-------------|
 | [notion-writer](./openclaw-skills/notion-writer/) | Create, read, update, and query Notion pages with rich content blocks |
-| [unity-claude](./openclaw-skills/unity-claude/) | Dispatch Claude Code tasks to Unity HPC via SSH with background execution |
+| [unity-claude](./openclaw-skills/unity-claude/) | Fire-and-forget dispatch to remote HPC with Ralph Loop, git worktree isolation, and Agent Teams |
 
 See [openclaw-skills/](./openclaw-skills/) for skill files.
 
@@ -88,7 +88,11 @@ awesome-skills/
 │   │   └── references/block-examples.json
 │   └── unity-claude/
 │       ├── SKILL.md
-│       └── references/architecture.md
+│       ├── README.md
+│       └── references/
+│           ├── architecture.md
+│           ├── git-worktree.md
+│           └── superpower.md
 └── claude-plugins/                        # Plugin backups
     ├── installed_plugins.json
     └── known_marketplaces.json
