@@ -9,7 +9,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 
 | Skill | Description |
 |-------|-------------|
-| [diff-review](./skills/diff-review/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
+| [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
 | [paper-review](./skills/paper-review/) | Multi-agent LaTeX paper review using Gemini, Codex, and Claude. Reviews writing, logic, structure, formatting |
 | [notion-organizer](./skills/notion-organizer/) | Automatically organize and optimize Notion page content given a URL |
 | [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
@@ -51,8 +51,8 @@ See [openclaw-skills/](./openclaw-skills/) for skill files.
 Install any skill using the skills.sh CLI:
 
 ```bash
-# Install diff-review (multi-agent code review)
-npx skills add https://github.com/mitchellx/awesome-skills --skill diff-review
+# Install diff-reviewer-multi-agent (multi-agent code review)
+npx skills add https://github.com/mitchellx/awesome-skills --skill diff-reviewer-multi-agent
 
 # Install paper-review (multi-agent LaTeX paper review)
 npx skills add https://github.com/mitchellx/awesome-skills --skill paper-review
@@ -76,7 +76,7 @@ awesome-skills/
 ├── README.md
 ├── LICENSE
 ├── skills/                                # Claude Code skills
-│   ├── diff-review/
+│   ├── diff-reviewer-multi-agent/
 │   ├── paper-review/
 │   ├── notion-organizer/
 │   ├── techdebt/

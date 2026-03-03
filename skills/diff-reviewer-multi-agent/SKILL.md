@@ -137,26 +137,49 @@ For each expertise defined:
 
 #### Multi-Agent Mode (default)
 
-Execute all three reviewers **in parallel**:
+Execute all three reviewers **in parallel** using the exact commands below.
+
+**⚠️ CRITICAL: Each CLI has different syntax. Do NOT mix them up!**
+- **Gemini**: `git diff | gemini -p "prompt"` (accepts stdin pipe ✅)
+- **Codex**: `codex exec "prompt"` (non-interactive headless mode, reads codebase directly ✅)
+- **Claude**: Spawn subagent via Task tool
+
+**Construct [FULL_PROMPT] for each reviewer by combining:**
+1. The reviewer's role file (e.g., `reviewers/gemini-role.md`)
+2. Any matched expertise prompts from Step 3
+3. The review target context (commit hash, diff stats)
+
+All three reviewers MUST receive the same review instructions — only the delivery mechanism differs.
 
 ```
 PARALLEL:
     Task 1: Run Gemini Review
         - Load reviewers/gemini-role.md
         - Inject matched expertise prompts
-        - Execute: see CLI Commands below
+        - Execute:
+            # For specific commit (pipe the diff as context):
+            git --no-pager diff ${COMMIT_HASH}~1 $COMMIT_HASH | gemini -p "[FULL_PROMPT]"
+            # For uncommitted changes:
+            git --no-pager diff HEAD | gemini -p "[FULL_PROMPT]"
         - Store result as GEMINI_RESULT
 
     Task 2: Run Codex Review
         - Load reviewers/codex-role.md
         - Inject matched expertise prompts
-        - Execute: see CLI Commands below
+        - Execute using `codex exec` (NOT `codex review`):
+            # For specific commit:
+            codex exec --sandbox read-only --ephemeral "Review commit ${COMMIT_HASH}. [FULL_PROMPT]"
+            # For uncommitted changes:
+            codex exec --sandbox read-only --ephemeral "Review all uncommitted changes. [FULL_PROMPT]"
+        - ⚠️ Do NOT use: `codex -p` (doesn't exist), `codex review` (flag conflicts with prompt)
+        - `codex exec` reads the codebase directly — no need to pipe diff
+        - `--sandbox read-only` = safe, `--ephemeral` = don't save session
         - Store result as CODEX_RESULT
 
     Task 3: Run Claude Review
         - Load reviewers/claude-role.md
         - Inject matched expertise prompts
-        - Spawn new Claude session with diff and prompt
+        - In Claude Code: use Task tool to spawn a subagent with diff + prompt
         - Store result as CLAUDE_RESULT
 END PARALLEL
 ```
@@ -165,48 +188,8 @@ Then proceed to **Step 5: Coordinate & Merge**.
 
 #### Single Reviewer Mode
 
-Execute only the selected reviewer:
-
-```
-Load reviewers/{REVIEWER}-role.md
-Inject matched expertise prompts
-Execute the reviewer
-Output result directly to terminal
-STOP (skip Step 5)
-```
-
-**CLI Commands:**
-
-For Gemini:
-```bash
-# Pipe diff to Gemini with review prompt
-# For uncommitted changes:
-git --no-pager diff HEAD | gemini -p "[FULL_PROMPT]"
-# For specific commit:
-git --no-pager diff ${COMMIT_HASH}~1 $COMMIT_HASH | gemini -p "[FULL_PROMPT]"
-```
-
-For Codex:
-```bash
-# ⚠️ codex CLI does NOT accept piped input or -p flag for prompts!
-# Use the dedicated 'review' subcommand with native flags:
-
-# For uncommitted changes:
-codex review --uncommitted "[REVIEW_PROMPT]"
-
-# For specific commit:
-codex review --commit $COMMIT_HASH "[REVIEW_PROMPT]"
-
-# For changes against a branch:
-codex review --base main "[REVIEW_PROMPT]"
-```
-
-For Claude:
-```bash
-# Spawn new Claude session (implementation depends on environment)
-# In Claude Code: use Task tool to spawn subagent
-# In Antigravity: use appropriate agent spawning mechanism
-```
+Execute only the selected reviewer using the commands above for the chosen reviewer.
+Output result directly to terminal, then STOP (skip Step 5).
 
 ---
 
