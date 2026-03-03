@@ -209,6 +209,8 @@ The Coordinator will:
 5. **Sort by severity**: Critical > High > Medium > Low
 6. **Generate unified report** using `templates/report.md`
 
+**⚠️ All emoji in the report template (🔵🟢🟣🚨⚠️📝💡📊📋📎 etc.) MUST be preserved in the final output. Do not strip or replace them.**
+
 ---
 
 ### Step 6: Save Report (MANDATORY)
@@ -218,9 +220,9 @@ The Coordinator will:
 ```bash
 # Generate filename
 # For commit review:
-REPORT_FILE="diff-review-$(echo $COMMIT_HASH | cut -c1-7)-$(date +%Y%m%d-%H%M%S).md"
+REPORT_FILE="diff-review-$(echo $COMMIT_HASH | cut -c1-7)-$(TZ='America/New_York' date +%Y%m%d-%H%M%S).md"
 # For uncommitted changes:
-REPORT_FILE="diff-review-$(date +%Y%m%d-%H%M%S).md"
+REPORT_FILE="diff-review-$(TZ='America/New_York' date +%Y%m%d-%H%M%S).md"
 ```
 
 **You MUST do BOTH of the following:**
