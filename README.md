@@ -10,6 +10,7 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 | Skill | Description |
 |-------|-------------|
 | [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
+| [paper-polish](./skills/paper-polish/) | Multi-agent paper polishing: Gemini (accuracy), Codex (de-LLM), Claude (flow) in parallel worktrees with merge |
 | [paper-review](./skills/paper-review/) | Multi-agent LaTeX paper review using Gemini, Codex, and Claude. Reviews writing, logic, structure, formatting |
 | [notion-organizer](./skills/notion-organizer/) | Automatically organize and optimize Notion page content given a URL |
 | [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
@@ -77,6 +78,7 @@ awesome-skills/
 ├── LICENSE
 ├── skills/                                # Claude Code skills
 │   ├── diff-reviewer-multi-agent/
+│   ├── paper-polish/
 │   ├── paper-review/
 │   ├── notion-organizer/
 │   ├── techdebt/
