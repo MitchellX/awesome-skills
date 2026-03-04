@@ -182,7 +182,12 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Remove parenthetical dashes (— / –) → rewrite with commas, subordinate clauses, or split sentences (max 1-2 per paper)
 - [ ] Reduce parenthetical overuse — long parentheticals (>8 words) become their own clause/sentence, max 2-3 per paragraph
 - [ ] Remove unnecessary `\textbf{}` emphasis in running text (bold only for definitions, table headers, conventions)
-- [ ] Remove LLM favorites: "leveraging"→"using", "utilize"→"use", "facilitate"→"enable"
+- [ ] Remove LLM favorites: "leveraging"→"using", "utilize"→"use", "facilitate"→"enable", "pivotal"→"key", "landscape"→"field", "paradigm"→"approach", "multifaceted"→"complex", "myriad"→"many", "realm"→"area", "holistic"→"overall", "meticulous"→"careful", "plethora"→"many"
+- [ ] Break Rule of Three — don't default to triplet lists/adjectives; vary list lengths (max 1 triplet per paragraph)
+- [ ] Remove puffery: "stands as a testament to", "plays a pivotal role", "paving the way for", "opening exciting avenues"
+- [ ] Authority claims ("studies have shown", "it is widely accepted") must have \cite{} or be rewritten
+- [ ] Limit meta-narration: "In this section we examine..." → just start; max 1 signpost per section
+- [ ] No generic conclusion filler: "As deep learning continues to evolve..." → delete
 - [ ] Reduce "Furthermore/Moreover/Additionally" — max 2 per section
 - [ ] Reduce subordinate clauses (especially nested ones)
 - [ ] Vary sentence openings (not every sentence starts with "We")
