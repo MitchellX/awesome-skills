@@ -24,7 +24,29 @@ These add zero information — delete them:
 - "It can be seen that" → delete, state directly
 - "As a matter of fact" → delete
 
-### 3. Replace LLM Vocabulary
+### 3. Remove Dash Overuse (Em Dash / En Dash)
+LLMs (especially Claude) overuse em dashes (—) and en dashes (–) as parenthetical insertions:
+- "Our method — which combines X and Y — achieves..." → use commas or parentheses instead
+- "This enables faster inference — a key advantage" → use a comma, semicolon, or split into two sentences
+- Occasional use is fine (1-2 per paper), but systematic dash-based clauses must be rewritten
+- Hyphens in compound adjectives ("state-of-the-art", "well-known") are fine — only target parenthetical dashes
+
+### 4. Reduce Parenthetical Overuse
+LLMs love stuffing extra info into parentheses — it breaks reading flow and feels like hedging:
+- "We use linear attention (which avoids the quadratic cost) to speed up inference" → integrate into the sentence or split
+- "Our method (LinStat) achieves..." → define once, then use without parentheses
+- Acceptable uses: acronym definitions on first use, citations, math notation references, brief clarifications
+- If a parenthetical is longer than ~8 words, it should be its own clause or sentence
+- Max 2-3 parentheticals per paragraph — if more, rewrite
+
+### 5. Remove Unnecessary Bold/Emphasis
+LLMs love to bold random phrases for "emphasis" — academic papers should let the writing speak for itself:
+- Remove `\textbf{}` used purely for emphasis in running text (e.g., "we achieve \textbf{state-of-the-art} results")
+- Bold is acceptable ONLY for: term definitions on first use, table headers, section-level formatting, and math symbols per convention
+- `\emph{}` / `\textit{}` for emphasis is OK sparingly (1-2 per section max), but not as a crutch
+- If every paragraph has bold phrases, strip them — good writing doesn't need visual shouting
+
+### 6. Replace LLM Vocabulary
 These words scream "AI wrote this":
 - "leverage" / "leveraging" → "use" / "using"
 - "utilize" / "utilization" → "use"
@@ -35,7 +57,7 @@ These words scream "AI wrote this":
 - "robust" → be specific about what makes it robust
 - "novel" → let the reader decide; describe what's new instead
 
-### 4. Reduce Transition Word Spam
+### 7. Reduce Transition Word Spam
 Max 2 per section of:
 - "Furthermore" → try "Also" or restructure
 - "Moreover" → often removable
@@ -43,17 +65,17 @@ Max 2 per section of:
 - "Consequently" → "So" or "Thus"
 - "Nevertheless" → "But" or "However"
 
-### 5. Vary Sentence Openings
+### 8. Vary Sentence Openings
 - Count how many sentences start with "We" — reduce to max 30%
 - Alternate: passive voice, "The model...", "This approach...", noun phrase starts
 - Don't start consecutive sentences the same way
 
-### 6. Tense Consistency
+### 9. Tense Consistency
 - Past tense: experiments, results ("We trained...", "The model achieved...")
 - Present tense: established facts, method descriptions ("Attention computes...", "The loss function is...")
 - Don't mix within a paragraph
 
-### 7. Remove Weak Hedging
+### 10. Remove Weak Hedging
 When data supports the claim, be direct:
 - "somewhat improved" → "improved by X%"
 - "relatively fast" → "1.3× faster"

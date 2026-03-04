@@ -179,6 +179,9 @@ All three agents share this checklist. Each focuses on their assigned items, but
 ### ✍️ Writing Quality & De-LLM (Codex primary)
 - [ ] Sentences under 30 words (split long ones)
 - [ ] Remove filler: "It is worth noting that" → delete, "In order to" → "To"
+- [ ] Remove parenthetical dashes (— / –) → rewrite with commas, subordinate clauses, or split sentences (max 1-2 per paper)
+- [ ] Reduce parenthetical overuse — long parentheticals (>8 words) become their own clause/sentence, max 2-3 per paragraph
+- [ ] Remove unnecessary `\textbf{}` emphasis in running text (bold only for definitions, table headers, conventions)
 - [ ] Remove LLM favorites: "leveraging"→"using", "utilize"→"use", "facilitate"→"enable"
 - [ ] Reduce "Furthermore/Moreover/Additionally" — max 2 per section
 - [ ] Reduce subordinate clauses (especially nested ones)
@@ -197,6 +200,16 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Related work positions this paper fairly (not dismissive)
 - [ ] Method section motivation is clear before technical details
 - [ ] Each section has a clear purpose and takeaway
+
+### 📐 Table Aesthetics (All agents)
+- [ ] Table width fits column/page width (use `\resizebox{\columnwidth}{!}{...}` or `\adjustbox` if needed)
+- [ ] Font size appropriate — use `\small` or `\footnotesize` for dense tables, never smaller than `\scriptsize`
+- [ ] Font size consistent across ALL tables in the paper
+- [ ] Table style matches the conference/journal template (booktabs `\toprule/\midrule/\bottomrule`, no vertical lines unless template requires)
+- [ ] Column alignment sensible: numbers right-aligned, text left-aligned, headers centered
+- [ ] No tables overflowing into margins
+- [ ] Cell padding sufficient — not cramped, not too sparse
+- [ ] Bold used only for best results or column headers, not random emphasis
 
 ### 🔧 LaTeX Hygiene (All agents)
 - [ ] Math notation consistent: \mathbf vs \bm, \mathcal, etc.
