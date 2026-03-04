@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel git worktrees. Two modes for different needs.
+Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel git worktrees. Three modes for different needs.
 
-## Two Rounds
+## Modes
 
 ### Round 1 — Specialized Roles (Default)
 
@@ -46,6 +46,21 @@ All agents apply the **same comprehensive checklist** → no auto-merge → comp
 
 **Best for:** Final polish before submission, leveraging each model's unique strengths.
 
+### Claude-Only (`--claude`)
+
+Claude applies the **full comprehensive checklist** solo. No Gemini/Codex CLIs needed.
+
+```
+/paper-polish --claude
+  ├── Create 1 git worktree
+  │   └── 🟣 Claude → ALL checklist items (unified.md)
+  ├── Claude polishes all .tex files
+  ├── Auto-merge back to current branch
+  └── Generate POLISH_REPORT.md
+```
+
+**Best for:** When you have ample Claude credits (Max subscription) and want thorough single-agent polish without extra CLI dependencies.
+
 ## Agent Roles (Round 1)
 
 | Agent | Focus | What They Fix |
@@ -78,6 +93,9 @@ All agents apply the **same comprehensive checklist** → no auto-merge → comp
 
 # Round 2 (full review — same task, human merge):
 /paper-polish --full
+
+# Claude-only (full checklist, single agent, auto-merge):
+/paper-polish --claude
 ```
 
 ## Output

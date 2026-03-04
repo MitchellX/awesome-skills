@@ -1,26 +1,28 @@
 ---
 name: paper-polish
-description: "Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel worktrees. Round 1 (default): each agent has a specialized focus, auto-merged. Round 2 (--full): all agents do the same comprehensive task, human merges via comparison report."
+description: "Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel worktrees. Round 1 (default): specialized roles, auto-merged. Round 2 (--full): all agents same task, comparison report. Claude-only (--claude): single agent, full checklist, auto-merged."
 ---
 
 # Paper Polish — Multi-Agent LaTeX Paper Polishing
 
 ## Overview
 
-Three AI agents (Gemini, Codex, Claude) each polish the paper independently in isolated git worktrees.
+Three modes for different needs:
 
 - **Round 1** (default): Each agent has a specialized focus → auto-merge → `POLISH_REPORT.md`
 - **Round 2** (`--full`): All agents apply the full checklist → no auto-merge → comparison report for human review
+- **Claude-only** (`--claude`): Claude applies the full checklist solo → auto-merge → `POLISH_REPORT.md`
 
 ## Trigger
 
 - **Round 1**: `/paper-polish`, "polish the paper", "润色论文"
 - **Round 2**: `/paper-polish --full`, "deep polish", "全面润色", "paper polish round 2"
+- **Claude-only**: `/paper-polish --claude`, "只用Claude", "claude only polish"
 
 ## Prerequisites
 
-- `gemini` CLI installed and authenticated
-- `codex` CLI installed and authenticated
+- **Round 1 & Round 2**: `gemini` CLI + `codex` CLI installed and authenticated
+- **Claude-only**: No extra CLIs needed — Claude handles everything
 - Git repo with LaTeX source files
 - Paper must compile (or at least have parseable .tex files)
 
@@ -282,6 +284,79 @@ When done:
   git branch -d wt/polish-gemini wt/polish-codex wt/polish-claude
   rm -rf .polish/
 ```
+
+---
+
+# Claude-Only Mode (--claude)
+
+## Overview
+
+Claude applies the **full comprehensive checklist** (`roles/unified.md`) solo. No Gemini or Codex CLIs needed. Useful when you have ample Claude credits (e.g., Max subscription) and want a thorough single-agent polish with auto-merge.
+
+## Workflow
+
+### Phase 0: Orient (Same as Round 1)
+
+1. Identify and classify `.tex` files
+2. Read experiments section for ground truth metrics
+3. Read current branch name
+4. Note key metrics for consistency checking
+
+### Phase 1: Create Worktree
+
+Only one worktree needed:
+
+```bash
+BASE_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+mkdir -p .worktrees
+
+git worktree add .worktrees/polish-claude -b wt/polish-claude
+```
+
+### Phase 2: Polish (Claude Solo)
+
+Apply ALL rules from `roles/unified.md` to every content file.
+
+Since YOU are Claude, directly edit files in `.worktrees/polish-claude/`:
+```
+For each content .tex file:
+  1. Read the file
+  2. Apply ALL improvements from roles/unified.md:
+     - Consistency & Accuracy (data, terminology, claims, references, tables)
+     - Writing Quality & De-LLM (filler, dashes, parentheses, bold, vocabulary, rule-of-three, puffery, pseudo-authority, meta-narration, transitions, hedging, tense)
+     - Structure & Flow (alignment, paragraph flow, logic, argument strength, conclusions, redundancy)
+     - Table Aesthetics (width, font size, style, alignment)
+     - LaTeX Hygiene (notation, references, formatting)
+  3. Write improved version back
+```
+
+Commit: `"polish: comprehensive review (claude)"`
+
+### Phase 3: Merge
+
+Single merge — no conflicts possible:
+
+```bash
+cd <project_root>
+git checkout $BASE_BRANCH
+git merge wt/polish-claude -m "merge: claude comprehensive polish"
+```
+
+### Phase 4: Cleanup
+
+```bash
+git worktree remove .worktrees/polish-claude
+git branch -d wt/polish-claude
+```
+
+### Phase 5: Generate Report
+
+Create `POLISH_REPORT.md` in the project root using `templates/report.md` format.
+
+Adapt the template for single-agent mode:
+- Only one agent column in the summary table
+- No conflict resolutions section (single agent = no conflicts)
+- Include before/after examples and checklist status as normal
 
 ---
 
