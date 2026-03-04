@@ -1,17 +1,21 @@
 ---
 name: paper-polish
-description: "Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel worktrees. Each agent polishes with a different focus, then merges into a unified improved version with a change report."
+description: "Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel worktrees. Round 1 (default): each agent has a specialized focus, auto-merged. Round 2 (--full): all agents do the same comprehensive task, human merges via comparison report."
 ---
 
 # Paper Polish — Multi-Agent LaTeX Paper Polishing
 
 ## Overview
 
-Three AI agents (Gemini, Codex, Claude) each polish the paper independently in isolated git worktrees, focusing on different aspects. The coordinator (you, Claude Code) merges all changes, resolves conflicts by choosing the best expression, and generates a detailed change report.
+Three AI agents (Gemini, Codex, Claude) each polish the paper independently in isolated git worktrees.
+
+- **Round 1** (default): Each agent has a specialized focus → auto-merge → `POLISH_REPORT.md`
+- **Round 2** (`--full`): All agents apply the full checklist → no auto-merge → comparison report for human review
 
 ## Trigger
 
-Activated when the user says: `/paper-polish`, "polish the paper", "润色论文", "paper polish", or similar.
+- **Round 1**: `/paper-polish`, "polish the paper", "润色论文"
+- **Round 2**: `/paper-polish --full`, "deep polish", "全面润色", "paper polish round 2"
 
 ## Prerequisites
 
@@ -19,6 +23,10 @@ Activated when the user says: `/paper-polish`, "polish the paper", "润色论文
 - `codex` CLI installed and authenticated
 - Git repo with LaTeX source files
 - Paper must compile (or at least have parseable .tex files)
+
+---
+
+# Round 1 — Specialized Roles (Default)
 
 ## Workflow
 
@@ -53,10 +61,8 @@ Run all three agents **in parallel**. Each agent modifies files **in their own w
 
 **Execution**: For each content .tex file:
 ```bash
-# Read the role prompt
 ROLE=$(cat roles/gemini.md)
 
-# For each content file, pipe through gemini
 cd .worktrees/polish-gemini
 for f in <content_files>; do
   cat "$f" | gemini -p "$ROLE
@@ -162,11 +168,128 @@ The report must include:
 
 ---
 
-## Polishing Checklist
+# Round 2 — Full Review (--full)
 
-All three agents share this checklist. Each focuses on their assigned items, but all should be aware of the full list.
+## Overview
 
-### 📊 Consistency & Accuracy (Gemini primary)
+All three agents apply the **same comprehensive checklist** (`roles/unified.md`). This maximizes coverage by leveraging each model's unique strengths and blind spots. The output is a **comparison report** for human review — no auto-merge.
+
+## Workflow
+
+### Phase 0–1: Same as Round 1
+
+Orient and create worktrees identically.
+
+### Phase 2: Dispatch Agents (Parallel — Same Task)
+
+All three agents use `roles/unified.md` as their prompt. Each modifies files **in their own worktree**.
+
+#### 🔵 Agent 1: Gemini
+
+```bash
+ROLE=$(cat roles/unified.md)
+
+cd .worktrees/polish-gemini
+for f in <content_files>; do
+  cat "$f" | gemini -p "$ROLE
+
+FILE: $f
+EXPERIMENTS DATA: <paste key metrics from Phase 0>
+
+Polish this LaTeX file. Output the COMPLETE improved file content (full LaTeX, no truncation). Do NOT add commentary — output ONLY the file content." > "${f}.improved"
+  mv "${f}.improved" "$f"
+done
+
+git add -A && git commit -m "polish-full: comprehensive review (gemini)"
+```
+
+#### 🟢 Agent 2: Codex
+
+```bash
+cd .worktrees/polish-codex
+codex exec --sandbox read-only --ephemeral \
+  "$(cat roles/unified.md)
+
+Working directory: $(pwd)
+Content files to polish: <list content files>
+
+For each file: read it, apply ALL improvements from the checklist, and write the improved version back.
+Commit all changes with message: 'polish-full: comprehensive review (codex)'"
+```
+
+#### 🟣 Agent 3: Claude
+
+Directly edit files in `.worktrees/polish-claude/` using Edit tool, applying all rules from `roles/unified.md`.
+
+Commit: `"polish-full: comprehensive review (claude)"`
+
+### Phase 3: Compare (NO Merge)
+
+**Do NOT merge.** Instead, generate comparison materials.
+
+```bash
+cd <project_root>
+mkdir -p .polish
+
+# 1. Export each agent's diff as a patch file
+git diff $BASE_BRANCH..wt/polish-gemini > .polish/gemini.patch
+git diff $BASE_BRANCH..wt/polish-codex  > .polish/codex.patch
+git diff $BASE_BRANCH..wt/polish-claude > .polish/claude.patch
+
+# 2. Compute stats
+echo "=== Gemini ===" && git diff --stat $BASE_BRANCH..wt/polish-gemini
+echo "=== Codex ===" && git diff --stat $BASE_BRANCH..wt/polish-codex
+echo "=== Claude ===" && git diff --stat $BASE_BRANCH..wt/polish-claude
+```
+
+### Phase 4: Generate Comparison Report
+
+Create `.polish/COMPARISON_REPORT.md` using `templates/report-comparison.md` format.
+
+**How to classify changes:**
+
+1. For each content file, compare the three agent versions against the original
+2. For each changed passage, check how many agents made the same or equivalent change:
+   - **✅ Consensus (3/3)**: All three changed it the same way → high confidence
+   - **🟡 Majority (2/3)**: Two agents agree → likely good
+   - **🔴 Unique (1/3)**: Only one agent changed it → review carefully
+   - **⚡ Conflict**: All three changed it, but differently → human picks best
+
+**⚠️ All emoji in the report MUST be preserved in the final output.**
+
+### Phase 5: Cleanup Worktrees (Keep Branches)
+
+```bash
+# Remove worktree directories (clean workspace)
+git worktree remove .worktrees/polish-gemini
+git worktree remove .worktrees/polish-codex
+git worktree remove .worktrees/polish-claude
+
+# KEEP branches — human needs them for cherry-picking
+# Branches: wt/polish-gemini, wt/polish-codex, wt/polish-claude
+```
+
+**Tell the user:**
+```
+Round 2 complete. Review .polish/COMPARISON_REPORT.md
+
+Useful commands:
+  git diff main..wt/polish-codex -- file.tex     # view agent's changes
+  git checkout wt/polish-gemini -- file.tex       # adopt agent's version
+  git diff wt/polish-gemini..wt/polish-codex      # compare two agents
+
+When done:
+  git branch -d wt/polish-gemini wt/polish-codex wt/polish-claude
+  rm -rf .polish/
+```
+
+---
+
+# Polishing Checklist
+
+All three agents share this checklist. In Round 1, each focuses on their assigned items. In Round 2, every agent covers everything.
+
+### 📊 Consistency & Accuracy (Round 1: Gemini primary)
 - [ ] All numbers in abstract/intro/conclusion match experiments section
 - [ ] Speedup claims cite the correct baseline and conditions
 - [ ] Table captions accurately describe content
@@ -176,7 +299,7 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Related work comparisons are factually accurate
 - [ ] No claims without supporting evidence in the paper
 
-### ✍️ Writing Quality & De-LLM (Codex primary)
+### ✍️ Writing Quality & De-LLM (Round 1: Codex primary)
 - [ ] Sentences under 30 words (split long ones)
 - [ ] Remove filler: "It is worth noting that" → delete, "In order to" → "To"
 - [ ] Remove parenthetical dashes (— / –) → rewrite with commas, subordinate clauses, or split sentences (max 1-2 per paper)
@@ -196,7 +319,7 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Consistent tense: past for experiments, present for established facts
 - [ ] No dangling modifiers or unclear antecedents
 
-### 🏗️ Structure & Flow (Claude primary)
+### 🏗️ Structure & Flow (Round 1: Claude primary)
 - [ ] Abstract ↔ Introduction ↔ Conclusion alignment
 - [ ] Every abstract claim backed by results in the paper
 - [ ] Conclusion doesn't introduce new information
@@ -206,7 +329,7 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Method section motivation is clear before technical details
 - [ ] Each section has a clear purpose and takeaway
 
-### 📐 Table Aesthetics (All agents)
+### 📐 Table Aesthetics (All agents, both rounds)
 - [ ] Table width fits column/page width (use `\resizebox{\columnwidth}{!}{...}` or `\adjustbox` if needed)
 - [ ] Font size appropriate — use `\small` or `\footnotesize` for dense tables, never smaller than `\scriptsize`
 - [ ] Font size consistent across ALL tables in the paper
@@ -216,7 +339,7 @@ All three agents share this checklist. Each focuses on their assigned items, but
 - [ ] Cell padding sufficient — not cramped, not too sparse
 - [ ] Bold used only for best results or column headers, not random emphasis
 
-### 🔧 LaTeX Hygiene (All agents)
+### 🔧 LaTeX Hygiene (All agents, both rounds)
 - [ ] Math notation consistent: \mathbf vs \bm, \mathcal, etc.
 - [ ] Reference format consistent: \cref vs \ref vs Section~\ref
 - [ ] Number formatting: consistent commas (1,000 vs 1000)
