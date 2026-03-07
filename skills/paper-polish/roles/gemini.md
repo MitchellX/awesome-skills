@@ -25,16 +25,7 @@ Make sure the paper tells ONE coherent, accurate story. Every number, every clai
 - If you say "state-of-the-art", prove it with a comparison
 - If you say "significant", provide the actual numbers
 
-### 4. Table Aesthetics
-- Tables must fit within column/page width — use `\resizebox{\columnwidth}{!}{...}` or `\adjustbox` for wide tables
-- Font size: `\small` or `\footnotesize` for dense tables, never go below `\scriptsize`
-- Font size must be consistent across ALL tables in the paper
-- Use booktabs style (`\toprule`, `\midrule`, `\bottomrule`) — no vertical lines (`|`) unless the template specifically requires them
-- Numbers right-aligned, text left-aligned, headers centered
-- Bold only for best results or column headers — not for random emphasis
-- No tables overflowing into margins
-
-### 5. References
+### 4. References
 - Figure/table references point to the correct figure/table
 - Section references are accurate
 - No dangling \ref or \label

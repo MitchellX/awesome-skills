@@ -33,18 +33,13 @@ A paper should read like a well-constructed argument, not a list of facts. Each 
 - If you compare to baselines, explain WHY your method is better (not just that it IS better)
 - Connect method design choices to observed results
 
-### 5. Reader Guidance (Without Over-Signposting)
+### 5. Reader Guidance
+- Section introductions: briefly say what this section will cover
+- Section conclusions (for long sections): summarize the key takeaway
 - Forward references when needed: "We address this in Section X"
 - Don't assume the reader remembers details from 3 pages ago — brief reminders are OK
-- But do NOT over-narrate: "In this section, we examine..." / "Now that we have established..." / "We will now turn our attention to..." → delete these; let section headings do the work
-- Max 1 signposting sentence per section
 
-### 6. Kill Generic Conclusions
-- Conclusion must summarize actual contributions and findings — nothing more
-- Delete vague forward-looking filler: "As deep learning continues to evolve...", "paving the way for future research", "opening exciting avenues"
-- Future work paragraph is OK only if it names specific, concrete next steps
-
-### 7. Redundancy Removal
+### 6. Redundancy Removal
 - If the same point is made in intro AND method AND experiments → keep the most detailed one, trim others
 - Repeated definitions: define once, reference later
 - Same example used multiple times: vary examples or reference back

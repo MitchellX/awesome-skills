@@ -9,13 +9,36 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 
 | Skill | Description |
 |-------|-------------|
-| [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
+| [anthropics-skills](./skills/anthropics-skills/) | Anthropic's official skills collection (pptx, docx, xlsx, pdf, canvas-design, mcp-builder, skill-creator, and more) |
+| [diff-review](./skills/diff-review/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
+| [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review (legacy version) |
 | [paper-polish](./skills/paper-polish/) | Multi-agent paper polishing: Gemini (accuracy), Codex (de-LLM), Claude (flow) in parallel worktrees with merge |
 | [paper-review](./skills/paper-review/) | Multi-agent LaTeX paper review using Gemini, Codex, and Claude. Reviews writing, logic, structure, formatting |
 | [notion-organizer](./skills/notion-organizer/) | Automatically organize and optimize Notion page content given a URL |
 | [techdebt](./skills/techdebt/) | Technical debt auditor with parallel subagents for duplication, code smells, architecture, and maintenance risks |
 | [upload-skills](./skills/upload-skills/) | Upload a local skill to the awesome-skills GitHub repo with auto-generated README |
 | [git-commit](https://github.com/github/awesome-copilot) | Conventional commit message generation (GitHub official) |
+
+### Anthropic Official Skills (bundled in `anthropics-skills/`)
+
+| Sub-Skill | Description |
+|-----------|-------------|
+| algorithmic-art | Generate algorithmic art with JavaScript templates |
+| brand-guidelines | Create and apply brand guidelines |
+| canvas-design | Design with Canvas using custom fonts |
+| doc-coauthoring | Collaborative document co-authoring |
+| docx | Read, write, and edit Word documents |
+| frontend-design | Frontend UI/UX design |
+| internal-comms | Internal communications templates |
+| mcp-builder | Build MCP servers (Python/Node) |
+| pdf | PDF generation, form filling, and extraction |
+| pptx | Create and edit PowerPoint presentations |
+| skill-creator | Create, test, and benchmark new skills |
+| slack-gif-creator | Create animated GIFs for Slack |
+| theme-factory | Design and apply visual themes |
+| web-artifacts-builder | Build web artifacts with bundling |
+| webapp-testing | Web application testing automation |
+| xlsx | Read, write, and edit Excel spreadsheets |
 
 ## Claude Plugins Backup
 
@@ -34,8 +57,6 @@ Installed plugins from [claude-plugins-official](https://github.com/anthropics/c
 
 See [claude-plugins/](./claude-plugins/) for backup files.
 
-*Last updated: 2026-03-03*
-
 ## OpenClaw Workspace Skills
 
 Skills running on the [OpenClaw](https://openclaw.com) agent platform:
@@ -47,16 +68,21 @@ Skills running on the [OpenClaw](https://openclaw.com) agent platform:
 
 See [openclaw-skills/](./openclaw-skills/) for skill files.
 
+*Last updated: 2026-03-07*
+
 ## Installation
 
 Install any skill using the skills.sh CLI:
 
 ```bash
-# Install diff-reviewer-multi-agent (multi-agent code review)
-npx skills add https://github.com/mitchellx/awesome-skills --skill diff-reviewer-multi-agent
+# Install diff-review (multi-agent code review)
+npx skills add https://github.com/mitchellx/awesome-skills --skill diff-review
 
 # Install paper-review (multi-agent LaTeX paper review)
 npx skills add https://github.com/mitchellx/awesome-skills --skill paper-review
+
+# Install paper-polish (multi-agent paper polishing)
+npx skills add https://github.com/mitchellx/awesome-skills --skill paper-polish
 
 # Install techdebt
 npx skills add https://github.com/mitchellx/awesome-skills --skill techdebt
@@ -77,6 +103,9 @@ awesome-skills/
 ├── README.md
 ├── LICENSE
 ├── skills/                                # Claude Code skills
+│   ├── anthropics-skills/                 # Official Anthropic skills collection
+│   │   └── skills/                        # 16 sub-skills (pptx, docx, pdf, etc.)
+│   ├── diff-review/
 │   ├── diff-reviewer-multi-agent/
 │   ├── paper-polish/
 │   ├── paper-review/
@@ -86,8 +115,7 @@ awesome-skills/
 ├── openclaw-skills/                       # OpenClaw platform skills
 │   ├── notion-writer/
 │   │   ├── SKILL.md
-│   │   ├── scripts/notion_api.py
-│   │   └── references/block-examples.json
+│   │   └── scripts/notion_api.py
 │   └── unity-claude/
 │       ├── SKILL.md
 │       ├── README.md
