@@ -133,53 +133,20 @@ ln -s ~/awesome-skills/openclaw-skills/* ~/.openclaw/workspace/skills/
 
 ```
 awesome-skills/
-├── README.md                           # This file
-├── LICENSE                             # MIT License
-├── skills-manifest.json                # ALL installed skills tracker
-├── skills/                             # Claude Code skills
+├── skills/                  # Claude Code skills
 │   ├── diff-review/
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   ├── reviewers/                  # Role prompts for each AI
-│   │   ├── expertise/                  # Domain-specific review prompts
-│   │   └── templates/
 │   ├── notion-organizer/
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   └── scripts/notion_api.py
 │   ├── paper-polish/
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   └── prompts/
 │   ├── paper-review/
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   ├── reviewers/
-│   │   └── templates/
 │   ├── techdebt/
-│   │   └── SKILL.md
 │   └── upload-skills/
-│       └── SKILL.md
-├── openclaw-skills/                    # OpenClaw platform skills
+├── openclaw-skills/         # OpenClaw platform skills
 │   ├── notion-writer/
-│   │   ├── SKILL.md
-│   │   ├── README.md
-│   │   └── scripts/notion_api.py
 │   ├── readme-generator/
-│   │   ├── SKILL.md
-│   │   └── references/
-│   │       ├── readme-format.md
-│   │       └── badge-rules.md
 │   └── unity-claude/
-│       ├── SKILL.md
-│       ├── README.md
-│       └── references/
-│           ├── architecture.md
-│           ├── git-worktree.md
-│           └── superpower.md
-└── claude-plugins/                     # Plugin backups
-    ├── installed_plugins.json
-    └── known_marketplaces.json
+├── claude-plugins/          # Plugin backups
+├── skills-manifest.json     # All installed skills tracker
+└── README.md
 ```
 
 ## 🔄 How It Works
