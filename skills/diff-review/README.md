@@ -2,7 +2,7 @@
 
 > Multi-agent code review using Gemini, Codex, and Claude in parallel
 
-**Multi-Agent Review** · **Expertise Auto-Detection** · **Unified Reports** · **Commit or Diff**
+**Multi-Agent Review** · **Auto-Select Mode** · **Expertise Detection** · **Unified Reports**
 
 ![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blueviolet) ![OpenClaw](https://img.shields.io/badge/OpenClaw-Plugin-blue)
 
@@ -13,7 +13,8 @@
 ## ✨ Features
 
 - **Parallel Multi-Agent Review** — Run Gemini, Codex, and Claude reviewers simultaneously for comprehensive code analysis
-- **Smart Expertise Detection** — Automatically identifies code domains (ML/AI, security, performance) and applies specialized review prompts
+- **Auto-Select Mode** — Automatically choose the best reviewer based on code complexity, language, and patterns
+- **Smart Expertise Detection** — Automatically identifies code domains (ML training, ML inference, security, performance) and applies specialized review prompts
 - **Unified Report Generation** — Merges findings from all reviewers, deduplicates issues, and sorts by severity
 - **Flexible Review Targets** — Review specific commits by hash or analyze all uncommitted changes
 - **Fallback Resilience** — Continues with available reviewers if some fail, never blocks on single-agent errors
@@ -33,7 +34,7 @@ flowchart TD
     D --> E[Unified Report]
 ```
 
-The skill fetches your git diff, analyzes code patterns to detect specialized domains (ML/AI, security, performance), then dispatches three reviewers in parallel. A coordinator agent merges their findings, removes duplicates, sorts by severity, and generates a unified markdown report with source attribution.
+The skill fetches your git diff, analyzes code patterns to detect specialized domains (ML training, ML inference, security, performance), then dispatches three reviewers in parallel. A coordinator agent merges their findings, removes duplicates, sorts by severity, and generates a unified markdown report with source attribution.
 
 ## 🚀 Quick Start
 
@@ -56,16 +57,16 @@ Review a specific commit:
 /diff-review abc123f
 ```
 
+Auto-select best reviewer based on code type:
+```bash
+/diff-review --reviewer=auto
+```
+
 Use a single reviewer:
 ```bash
 /diff-review --reviewer=gemini
 /diff-review --reviewer=codex
 /diff-review --reviewer=claude
-```
-
-Auto-select best reviewer based on code type:
-```bash
-/diff-review --reviewer=auto
 ```
 
 ## 📖 Documentation
@@ -80,7 +81,7 @@ Auto-select best reviewer based on code type:
 - `<commit-hash>` (optional): Full or short commit hash to review. Omit to review uncommitted changes.
 - `--reviewer` (optional): 
   - `all` (default): Multi-agent mode with parallel execution
-  - `auto`: Auto-select best reviewer based on code patterns
+  - `auto`: Auto-select best reviewer based on code patterns (complexity, language, domain)
   - `gemini`, `codex`, `claude`: Use single reviewer only
 
 ### Review Workflow
@@ -95,41 +96,58 @@ Auto-select best reviewer based on code type:
 ### Expertise Areas
 
 The skill automatically detects and applies specialized review logic for:
-- **Machine Learning / AI** — Training loops, model architecture, data handling
+- **Machine Learning Training** — Training loops, model architecture, data handling, gradient flow
+- **Machine Learning Inference** — Model serving, batching, optimization, latency, thread safety
 - **Security** — Authentication, input validation, sensitive data exposure
 - **Performance** — Algorithmic efficiency, resource management, caching
 
 Expertise detection rules are defined in `expertise/_index.md`.
 
+### Auto-Select Mode
+
+When `--reviewer=auto` is used, the skill analyzes your code to choose the optimal reviewer:
+
+**Selection criteria:**
+- **Security-sensitive code** → Codex (careful security analysis)
+- **Large changesets** (>20 files or >500 lines) → Codex (thorough review)
+- **Complex TypeScript/multi-service changes** → Codex (type system expertise)
+- **Frontend-only changes** → Gemini (faster feedback)
+- **Python ecosystem** → Gemini (strong Python support)
+- **Documentation only** → Gemini (simple text review)
+
+Decision tree and complexity scoring logic in `reviewers/auto-select.md`.
+
 ## 🏗️ Project Structure
 
 ```
 diff-review/
-├── SKILL.md              # Main skill documentation
-├── expertise/            # Domain-specific review prompts
-│   ├── _index.md         # Detection rules
-│   └── training.md       # ML/AI training expertise
-├── reviewers/            # Reviewer role definitions
-│   ├── gemini-role.md    # Gemini CLI reviewer
-│   ├── codex-role.md     # Codex CLI reviewer
-│   ├── claude-role.md    # Claude reviewer
-│   └── coordinator.md    # Multi-agent coordinator
+├── SKILL.md                  # Main skill documentation
+├── expertise/                # Domain-specific review prompts
+│   ├── _index.md             # Detection rules
+│   ├── inference.md          # ML inference code review
+│   └── training.md           # ML/AI training expertise
+├── reviewers/                # Reviewer role definitions
+│   ├── auto-select.md        # Auto-select decision tree
+│   ├── gemini-role.md        # Gemini CLI reviewer
+│   ├── codex-role.md         # Codex CLI reviewer
+│   ├── claude-role.md        # Claude reviewer
+│   └── coordinator.md        # Multi-agent coordinator
 └── templates/
-    └── report.md         # Report format template
+    └── report.md             # Report format template
 ```
 
 ## 📋 Output Format
 
 Generated reports include:
 
-- **Review Summary** — Target (commit or uncommitted), timestamp, reviewer sources
+- **Review Summary** — Target (commit or uncommitted), timestamp (EST), reviewer sources
 - **Severity Breakdown** — Counts of Critical/High/Medium/Low issues
 - **Merged Issues** — Deduplicated findings sorted by severity with source attribution
 - **Raw Outputs** — Collapsible sections with full individual reviewer results
 
 Reports are saved as:
-- Commit reviews: `diff-review-<short-hash>-YYYYMMDD-HHMMSS.md`
-- Uncommitted: `diff-review-YYYYMMDD-HHMMSS.md`
+- Commit reviews: `diff-review-<short-hash>-YYYYMMDD-HHMMSS.md` (EST)
+- Uncommitted: `diff-review-YYYYMMDD-HHMMSS.md` (EST)
 
 ## ⚙️ Configuration
 
@@ -152,6 +170,14 @@ To add domain-specific review logic:
    - File patterns: `*.tsx`, `*.jsx`, `*.vue`
    - Prompt file: `expertise/frontend.md`
    ```
+
+### Customizing Auto-Select Logic
+
+Edit `reviewers/auto-select.md` to modify:
+- Pattern-based routing rules (security, large changesets, etc.)
+- Complexity scoring weights
+- Framework/language detection patterns
+- Default fallback behavior
 
 ## 🤝 Contributing
 

@@ -2,7 +2,7 @@
 
 > 使用 Gemini、Codex 和 Claude 并行进行多智能体代码审查
 
-**多智能体审查** · **领域自动检测** · **统一报告** · **提交或差异**
+**多智能体审查** · **智能选择模式** · **领域检测** · **统一报告**
 
 ![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blueviolet) ![OpenClaw](https://img.shields.io/badge/OpenClaw-Plugin-blue)
 
@@ -13,7 +13,8 @@
 ## ✨ 功能特性
 
 - **并行多智能体审查** — 同时运行 Gemini、Codex 和 Claude 审查器，进行全面的代码分析
-- **智能领域检测** — 自动识别代码领域（机器学习/AI、安全、性能）并应用专业审查提示
+- **智能选择模式** — 根据代码复杂度、语言和模式自动选择最佳审查器
+- **智能领域检测** — 自动识别代码领域（机器学习训练、机器学习推理、安全、性能）并应用专业审查提示
 - **统一报告生成** — 合并所有审查器的发现，去重问题，按严重程度排序
 - **灵活的审查目标** — 通过哈希值审查特定提交，或分析所有未提交的更改
 - **容错机制** — 如果部分审查器失败，继续使用可用的审查器，不会因单个智能体错误而阻塞
@@ -33,7 +34,7 @@ flowchart TD
     D --> E[统一报告]
 ```
 
-该技能首先获取 git diff，分析代码模式以检测专业领域（机器学习/AI、安全、性能），然后并行分派三个审查器。协调器智能体合并它们的发现，去除重复项，按严重程度排序，并生成带有来源标注的统一 Markdown 报告。
+该技能首先获取 git diff，分析代码模式以检测专业领域（机器学习训练、机器学习推理、安全、性能），然后并行分派三个审查器。协调器智能体合并它们的发现，去除重复项，按严重程度排序，并生成带有来源标注的统一 Markdown 报告。
 
 ## 🚀 快速开始
 
@@ -56,16 +57,16 @@ flowchart TD
 /diff-review abc123f
 ```
 
+根据代码类型自动选择最佳审查器：
+```bash
+/diff-review --reviewer=auto
+```
+
 使用单个审查器：
 ```bash
 /diff-review --reviewer=gemini
 /diff-review --reviewer=codex
 /diff-review --reviewer=claude
-```
-
-根据代码类型自动选择最佳审查器：
-```bash
-/diff-review --reviewer=auto
 ```
 
 ## 📖 文档
@@ -80,7 +81,7 @@ flowchart TD
 - `<commit-hash>`（可选）：要审查的完整或短提交哈希值。省略则审查未提交的更改。
 - `--reviewer`（可选）： 
   - `all`（默认）：多智能体模式，并行执行
-  - `auto`：根据代码模式自动选择最佳审查器
+  - `auto`：根据代码模式（复杂度、语言、领域）自动选择最佳审查器
   - `gemini`、`codex`、`claude`：仅使用单个审查器
 
 ### 审查流程
@@ -95,41 +96,58 @@ flowchart TD
 ### 专业领域
 
 该技能会自动检测并应用以下领域的专业审查逻辑：
-- **机器学习 / AI** — 训练循环、模型架构、数据处理
+- **机器学习训练** — 训练循环、模型架构、数据处理、梯度流
+- **机器学习推理** — 模型服务、批处理、优化、延迟、线程安全
 - **安全** — 身份验证、输入验证、敏感数据暴露
 - **性能** — 算法效率、资源管理、缓存
 
 领域检测规则定义在 `expertise/_index.md` 中。
 
+### 智能选择模式
+
+使用 `--reviewer=auto` 时，技能会分析代码并选择最优审查器：
+
+**选择标准：**
+- **安全敏感代码** → Codex（仔细的安全分析）
+- **大型变更集**（>20 文件或 >500 行）→ Codex（全面审查）
+- **复杂 TypeScript/多服务变更** → Codex（类型系统专长）
+- **纯前端变更** → Gemini（快速反馈）
+- **Python 生态** → Gemini（强大的 Python 支持）
+- **纯文档** → Gemini（简单文本审查）
+
+决策树和复杂度评分逻辑详见 `reviewers/auto-select.md`。
+
 ## 🏗️ 项目结构
 
 ```
 diff-review/
-├── SKILL.md              # 主技能文档
-├── expertise/            # 领域专业审查提示
-│   ├── _index.md         # 检测规则
-│   └── training.md       # 机器学习/AI 训练专业知识
-├── reviewers/            # 审查器角色定义
-│   ├── gemini-role.md    # Gemini CLI 审查器
-│   ├── codex-role.md     # Codex CLI 审查器
-│   ├── claude-role.md    # Claude 审查器
-│   └── coordinator.md    # 多智能体协调器
+├── SKILL.md                  # 主技能文档
+├── expertise/                # 领域专业审查提示
+│   ├── _index.md             # 检测规则
+│   ├── inference.md          # 机器学习推理代码审查
+│   └── training.md           # 机器学习/AI 训练专业知识
+├── reviewers/                # 审查器角色定义
+│   ├── auto-select.md        # 智能选择决策树
+│   ├── gemini-role.md        # Gemini CLI 审查器
+│   ├── codex-role.md         # Codex CLI 审查器
+│   ├── claude-role.md        # Claude 审查器
+│   └── coordinator.md        # 多智能体协调器
 └── templates/
-    └── report.md         # 报告格式模板
+    └── report.md             # 报告格式模板
 ```
 
 ## 📋 输出格式
 
 生成的报告包括：
 
-- **审查摘要** — 目标（提交或未提交）、时间戳、审查器来源
+- **审查摘要** — 目标（提交或未提交）、时间戳（EST）、审查器来源
 - **严重程度分类** — 严重/高/中/低问题的数量统计
 - **合并问题** — 按严重程度排序的去重发现，附带来源标注
 - **原始输出** — 可折叠的各个审查器完整结果
 
 报告保存为：
-- 提交审查：`diff-review-<short-hash>-YYYYMMDD-HHMMSS.md`
-- 未提交更改：`diff-review-YYYYMMDD-HHMMSS.md`
+- 提交审查：`diff-review-<short-hash>-YYYYMMDD-HHMMSS.md`（EST）
+- 未提交更改：`diff-review-YYYYMMDD-HHMMSS.md`（EST）
 
 ## ⚙️ 配置
 
@@ -152,6 +170,14 @@ diff-review/
    - 文件模式：`*.tsx`、`*.jsx`、`*.vue`
    - 提示文件：`expertise/frontend.md`
    ```
+
+### 自定义智能选择逻辑
+
+编辑 `reviewers/auto-select.md` 以修改：
+- 基于模式的路由规则（安全、大型变更集等）
+- 复杂度评分权重
+- 框架/语言检测模式
+- 默认回退行为
 
 ## 🤝 贡献指南
 
