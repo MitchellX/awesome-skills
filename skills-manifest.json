@@ -1,0 +1,72 @@
+{
+  "description": "All installed Claude Code skills on Unity. Used for environment migration.",
+  "generated": "2026-03-08T17:14:15+00:00",
+  "skills": [
+    {
+      "name": "anthropics-skills",
+      "source": "official",
+      "is_symlink": false,
+      "install": "npx skills add https://github.com/anthropics/anthropic-skills"
+    },
+    {
+      "name": "diff-review",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/diff-review ~/.claude/skills/diff-review"
+    },
+    {
+      "name": "find-skills",
+      "source": "marketplace",
+      "is_symlink": true,
+      "install": "claude skill install find-skills"
+    },
+    {
+      "name": "multi-agent-brainstorming",
+      "source": "marketplace",
+      "is_symlink": true,
+      "install": "claude skill install multi-agent-brainstorming"
+    },
+    {
+      "name": "notion-organizer",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/notion-organizer ~/.claude/skills/notion-organizer"
+    },
+    {
+      "name": "paper-polish",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/paper-polish ~/.claude/skills/paper-polish"
+    },
+    {
+      "name": "paper-review",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/paper-review ~/.claude/skills/paper-review"
+    },
+    {
+      "name": "pptx",
+      "source": "internal-shortcut",
+      "is_symlink": true,
+      "install": "ln -s anthropics-skills/skills/pptx ~/.claude/skills/pptx"
+    },
+    {
+      "name": "skill-creator",
+      "source": "marketplace",
+      "is_symlink": true,
+      "install": "claude skill install skill-creator"
+    },
+    {
+      "name": "techdebt",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/techdebt ~/.claude/skills/techdebt"
+    },
+    {
+      "name": "upload-skills",
+      "source": "awesome-skills",
+      "is_symlink": true,
+      "install": "ln -s ~/awesome-skills/skills/upload-skills ~/.claude/skills/upload-skills"
+    }
+  ]
+}
