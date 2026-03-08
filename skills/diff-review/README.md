@@ -19,6 +19,22 @@
 - **Fallback Resilience** — Continues with available reviewers if some fail, never blocks on single-agent errors
 - **Source Attribution** — Shows which reviewer(s) found each issue for transparency and trust building
 
+## 🔄 How It Works
+
+```mermaid
+flowchart TD
+    A[Get Diff] --> B[Auto-detect Expertise]
+    B --> C1[Gemini Review]
+    B --> C2[Codex Review]
+    B --> C3[Claude Review]
+    C1 --> D[Coordinator: Merge & Dedupe]
+    C2 --> D
+    C3 --> D
+    D --> E[Unified Report]
+```
+
+The skill fetches your git diff, analyzes code patterns to detect specialized domains (ML/AI, security, performance), then dispatches three reviewers in parallel. A coordinator agent merges their findings, removes duplicates, sorts by severity, and generates a unified markdown report with source attribution.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
