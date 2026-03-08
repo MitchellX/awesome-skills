@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[English](README.md) | [简体中文](README_CN.md)
+
 Dispatch Claude Code tasks to a remote HPC cluster (Unity) via SSH. Fire-and-forget with instant webhook notifications on completion. An [OpenClaw](https://github.com/openclaw/openclaw) skill.
 
 ## Features

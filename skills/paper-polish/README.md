@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[English](README.md) | [简体中文](README_CN.md)
+
 Multi-agent LaTeX paper polishing using Gemini, Codex, and Claude in parallel git worktrees. Each agent focuses on a different aspect of writing quality, then changes are merged with intelligent conflict resolution.
 
 ## How It Works
