@@ -33,6 +33,18 @@ Skills for [Claude Code](https://claude.ai/code) that extend capabilities with s
 | [techdebt](./skills/techdebt/) | Scan codebase for technical debt: duplicated code, code smells, architectural issues, and maintenance risks |
 | [upload-skills](./skills/upload-skills/) | Upload a local skill from ~/.claude/skills/ to the awesome-skills GitHub repo with auto-generated README |
 
+## 🏪 External & Marketplace Skills
+
+Third-party and official skills installed via marketplace or manual setup (tracked in [skills-manifest.json](./skills-manifest.json)):
+
+| Skill | Source | Install Command |
+|-------|--------|----------------|
+| anthropics-skills | Anthropic Official | `npx skills add https://github.com/anthropics/anthropic-skills` |
+| pptx | Internal shortcut → anthropics-skills | `ln -s anthropics-skills/skills/pptx ~/.claude/skills/pptx` |
+| find-skills | Marketplace | `claude skill install find-skills` |
+| multi-agent-brainstorming | Marketplace | `claude skill install multi-agent-brainstorming` |
+| skill-creator | Marketplace | `claude skill install skill-creator` |
+
 ## 🔌 Claude Plugins
 
 Installed plugins from [claude-plugins-official](https://github.com/anthropics/claude-plugins) and community sources:
