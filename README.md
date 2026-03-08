@@ -9,6 +9,8 @@
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Skills-blueviolet)](https://claude.ai/code)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-Platform-blue)](https://openclaw.com)
 
+[English](README.md) | [简体中文](README_CN.md)
+
 ---
 
 ## ✨ Features
