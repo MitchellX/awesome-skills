@@ -11,7 +11,6 @@ A curated collection of custom skills for [Claude Code](https://claude.ai/code).
 |-------|-------------|
 | [anthropics-skills](./skills/anthropics-skills/) | Anthropic's official skills collection (pptx, docx, xlsx, pdf, canvas-design, mcp-builder, skill-creator, and more) |
 | [diff-review](./skills/diff-review/) | Multi-agent code review using Gemini, Codex, and Claude in parallel. Auto-detects expertise and merges findings |
-| [diff-reviewer-multi-agent](./skills/diff-reviewer-multi-agent/) | Multi-agent code review (legacy version) |
 | [paper-polish](./skills/paper-polish/) | Multi-agent paper polishing: Gemini (accuracy), Codex (de-LLM), Claude (flow) in parallel worktrees with merge |
 | [paper-review](./skills/paper-review/) | Multi-agent LaTeX paper review using Gemini, Codex, and Claude. Reviews writing, logic, structure, formatting |
 | [notion-organizer](./skills/notion-organizer/) | Automatically organize and optimize Notion page content given a URL |
@@ -106,7 +105,6 @@ awesome-skills/
 │   ├── anthropics-skills/                 # Official Anthropic skills collection
 │   │   └── skills/                        # 16 sub-skills (pptx, docx, pdf, etc.)
 │   ├── diff-review/
-│   ├── diff-reviewer-multi-agent/
 │   ├── paper-polish/
 │   ├── paper-review/
 │   ├── notion-organizer/
