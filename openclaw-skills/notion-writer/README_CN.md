@@ -19,6 +19,19 @@
 - **后台执行** — 所有操作通过 `sessions_spawn` 在子 agent 中运行，不阻塞主会话
 - **丰富格式** — 支持标题、表格、代码块、折叠区、分隔线等多种内容类型
 
+## 🔄 工作流程
+
+```mermaid
+flowchart TD
+    A[用户：/notion 命令或自然语言] --> B[主会话：启动子 agent]
+    B --> C[子 agent：准备内容 JSON]
+    C --> D[子 agent：运行 notion_api.py]
+    D --> E[Notion API：创建/更新/查询页面]
+    E --> F[子 agent：返回结果]
+```
+
+所有 Notion 操作均在后台子 agent 中异步执行，避免阻塞主会话。子 agent 负责准备 JSON 数据、通过 Python 脚本调用 API，并报告执行结果。
+
 ## 🚀 快速开始
 
 ### 前置要求

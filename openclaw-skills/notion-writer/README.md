@@ -19,6 +19,19 @@
 - **Background execution** — All operations run in sub-agents via `sessions_spawn` to avoid blocking
 - **Rich formatting** — Support for headings, tables, code blocks, toggles, dividers, and more
 
+## 🔄 How It Works
+
+```mermaid
+flowchart TD
+    A[User: /notion command or natural language] --> B[Main Session: spawn sub-agent]
+    B --> C[Sub-agent: prepare content JSON]
+    C --> D[Sub-agent: run notion_api.py]
+    D --> E[Notion API: create/update/query pages]
+    E --> F[Sub-agent: report result back]
+```
+
+All Notion operations run asynchronously in background sub-agents to avoid blocking the main session. The sub-agent handles JSON preparation, API calls via the Python script, and result reporting.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
