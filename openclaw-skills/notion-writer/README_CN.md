@@ -23,14 +23,17 @@
 
 ```mermaid
 flowchart TD
-    A[用户：/notion 命令或自然语言] --> B[主会话：启动子 agent]
-    B --> C[子 agent：准备内容 JSON]
-    C --> D[子 agent：运行 notion_api.py]
-    D --> E[Notion API：创建/更新/查询页面]
-    E --> F[子 agent：返回结果]
+    A[用户请求] --> B{/notion 命令?}
+    B -->|是| C[解析子命令]
+    B -->|自然语言| C
+    C --> D[启动子 Agent]
+    D --> E[构建 JSON 内容块]
+    E --> F[notion_api.py]
+    F --> G[Notion API v2022-06-28]
+    G --> H[返回结果]
 ```
 
-所有 Notion 操作均在后台子 agent 中异步执行，避免阻塞主会话。子 agent 负责准备 JSON 数据、通过 Python 脚本调用 API，并报告执行结果。
+所有操作通过 `sessions_spawn` 派发到后台子 agent 执行，保持主会话流畅。子 agent 将内容构建为 JSON blocks，然后调用 `notion_api.py` 处理认证和 API 通信。
 
 ## 🚀 快速开始
 
@@ -72,7 +75,7 @@ Block 示例见 [`references/block-examples.json`](references/block-examples.jso
 
 | 配置项 | 值 | 说明 |
 |--------|-----|------|
-| **Token** | `ntn_3625786963717...` | Integration token |
+| **Token** | `REDACTED` | Integration token |
 | **默认数据库** | `2f9871232f4580b6bf51e923c03cb30f` | AI tool 数据库 |
 | **API 版本** | `2022-06-28` | Notion API 版本 |
 | **Base URL** | `https://api.notion.com/v1` | API 端点 |

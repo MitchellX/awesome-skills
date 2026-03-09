@@ -40,9 +40,11 @@ Common badges (include when applicable):
 
 ### Step 3: Generate README
 
-Produce two files following the format in `references/readme-format.md`:
+**⚠️ 无论 create 还是 update，始终生成/更新双语版本：**
 - **README.md** — English
 - **README_CN.md** — 简体中文 (not word-for-word translation; natural Chinese with localized examples)
+
+如果只有 README.md 没有 README_CN.md，也必须补上中文版。反之亦然。
 
 Each file links to the other via a language switcher at the top.
 
@@ -86,18 +88,31 @@ When an existing README is found:
    - **Old section not in new template** → keep at bottom under `## Other`
 4. Never delete user-written content silently
 
-### Step 5: Write Files
+### Step 5: Write Files & Push
 
-Write README.md and README_CN.md to the project directory. Show a summary of what changed:
+Write README.md and README_CN.md to the project directory, then **immediately commit and push**:
+
+```bash
+cd <project_dir>
+git add README.md README_CN.md
+git commit -m "docs: update README with readme-generator"
+git push
+```
+
+Show a summary of what changed:
 ```
 ✅ README.md — generated (new)
 ✅ README_CN.md — generated (new)
+✅ Pushed to origin
 ```
 or for updates:
 ```
 ✅ README.md — updated (3 sections refreshed, 2 preserved)
 ✅ README_CN.md — updated (3 sections refreshed, 2 preserved)
+✅ Pushed to origin
 ```
+
+**Never leave generated files uncommitted.** Always push after writing.
 
 ## Running via sessions_spawn
 

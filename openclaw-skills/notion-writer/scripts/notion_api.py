@@ -15,7 +15,7 @@ import re
 import sys
 import requests
 
-TOKEN = "REDACTED_NOTION_TOKEN"
+TOKEN = "REDACTED"
 DEFAULT_DB = "2f9871232f4580b6bf51e923c03cb30f"
 API_VERSION = "2022-06-28"
 BASE_URL = "https://api.notion.com/v1"
@@ -53,15 +53,18 @@ def cmd_create(args):
     """Create a new page in a database."""
     db_id = parse_notion_id(args.db or DEFAULT_DB)
 
+    title_field = getattr(args, 'title_field', None) or "Task name"
     properties = {
-        "Task name": {"title": [{"text": {"content": args.title}}]},
+        title_field: {"title": [{"text": {"content": args.title}}]},
     }
     if args.description:
         properties["Description"] = {
             "rich_text": [{"text": {"content": args.description}}]
         }
     if args.status:
-        properties["Status"] = {"status": {"name": args.status}}
+        # Some databases use "status" type, others use "select" type for Status
+        status_type = getattr(args, 'status_type', None) or "status"
+        properties["Status"] = {status_type: {"name": args.status}}
     if args.priority:
         properties["Priority"] = {"select": {"name": args.priority}}
 
@@ -214,8 +217,10 @@ def main():
     p = sub.add_parser("create")
     p.add_argument("--title", required=True)
     p.add_argument("--db")
+    p.add_argument("--title-field", dest="title_field")
     p.add_argument("--description")
     p.add_argument("--status", default="Not Started")
+    p.add_argument("--status-type", dest="status_type", default="status", help="Property type for Status: status or select")
     p.add_argument("--priority")
     p.add_argument("--content-file")
 

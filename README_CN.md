@@ -89,7 +89,7 @@
 jq -r '.skills[].install' skills-manifest.json | while read cmd; do eval "$cmd"; done
 ```
 
-*最近清单更新：2026-03-08*
+*最近清单更新：2026-03-09*
 
 ## 🚀 安装
 

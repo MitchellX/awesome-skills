@@ -7,7 +7,7 @@ description: Create, read, update, and query Notion pages. Triggers on /notion c
 
 ## Config
 
-- **Token**: `REDACTED_NOTION_TOKEN`
+- **Token**: `REDACTED`
 - **Default Database**: `2f9871232f4580b6bf51e923c03cb30f` (AI tool)
 - **API Version**: `2022-06-28`
 - **Base URL**: `https://api.notion.com/v1`

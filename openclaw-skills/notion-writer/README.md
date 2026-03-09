@@ -23,14 +23,17 @@
 
 ```mermaid
 flowchart TD
-    A[User: /notion command or natural language] --> B[Main Session: spawn sub-agent]
-    B --> C[Sub-agent: prepare content JSON]
-    C --> D[Sub-agent: run notion_api.py]
-    D --> E[Notion API: create/update/query pages]
-    E --> F[Sub-agent: report result back]
+    A[User Request] --> B{/notion command?}
+    B -->|Yes| C[Parse Subcommand]
+    B -->|Natural language| C
+    C --> D[Spawn Sub-agent]
+    D --> E[Build Content JSON]
+    E --> F[notion_api.py]
+    F --> G[Notion API v2022-06-28]
+    G --> H[Return Result]
 ```
 
-All Notion operations run asynchronously in background sub-agents to avoid blocking the main session. The sub-agent handles JSON preparation, API calls via the Python script, and result reporting.
+All operations are dispatched to a background sub-agent via `sessions_spawn`, keeping the main session responsive. The sub-agent prepares content as JSON blocks, then calls `notion_api.py` which handles authentication and API communication.
 
 ## 🚀 Quick Start
 
@@ -72,7 +75,7 @@ Default configuration (set in `SKILL.md`):
 
 | Setting | Value | Notes |
 |---------|-------|-------|
-| **Token** | `ntn_3625786963717...` | Integration token |
+| **Token** | `REDACTED` | Integration token |
 | **Default Database** | `2f9871232f4580b6bf51e923c03cb30f` | AI tool database |
 | **API Version** | `2022-06-28` | Notion API version |
 | **Base URL** | `https://api.notion.com/v1` | API endpoint |
