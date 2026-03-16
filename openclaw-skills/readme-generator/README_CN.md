@@ -4,7 +4,7 @@
 
 **自动徽章推断** · **双语输出** · **智能合并** · **工作流程图** · **OpenClaw 原生技能**
 
-![OpenClaw](https://img.shields.io/badge/OpenClaw-Plugin-blue) ![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blueviolet) ![Shell](https://img.shields.io/badge/Shell-Bash-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
+![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-blue) ![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)
 
 [English](README.md) | [简体中文](README_CN.md)
 
@@ -29,7 +29,6 @@ flowchart TD
     D -->|是| E[智能合并]
     D -->|否| F[写入文件]
     E --> F
-    F --> G[提交并推送]
 ```
 
 该技能会分析项目结构，检测语言/框架/工具，生成合适的徽章，按最佳实践产出双语 README 文件，并智能合并现有内容以保留手动编辑。
@@ -68,7 +67,7 @@ readme-generator/
 ├── SKILL.md                      # 主技能文档
 ├── references/
 │   ├── readme-format.md          # README 模板规范
-│   └── badge-rules.md           # 徽章推断规则
+│   └── badge-rules.md            # 徽章推断规则
 └── scripts/
     └── analyze_project.sh        # 项目元数据分析器
 ```
@@ -141,10 +140,6 @@ readme-generator/
 2. 进行修改
 3. 用各种类型的项目测试
 4. 提交 pull request
-
-## 📄 许可证
-
-本项目采用 [MIT 许可证](../../LICENSE)。
 
 ## 🙏 致谢
 

@@ -1,14 +1,14 @@
 ---
 name: notion-writer
-description: Create, read, update, and query Notion pages. Triggers on /notion command or when user asks to write/create something in Notion. Default database is AI tool (2f9871232f4580b6bf51e923c03cb30f). Supports creating pages with rich content blocks, querying databases, and updating existing pages.
+description: Create, read, update, and query Notion pages. Triggers on /notion command or when user asks to write/create something in Notion. Default database is AI tool (YOUR_DATABASE_ID). Supports creating pages with rich content blocks, querying databases, and updating existing pages.
 ---
 
 # Notion Writer
 
 ## Config
 
-- **Token**: `REDACTED`
-- **Default Database**: `2f9871232f4580b6bf51e923c03cb30f` (AI tool)
+- **Token**: Set via `NOTION_TOKEN` environment variable (in `~/.bashrc`)
+- **Default Database**: `YOUR_DATABASE_ID` (AI tool)
 - **API Version**: `2022-06-28`
 - **Base URL**: `https://api.notion.com/v1`
 
@@ -19,7 +19,7 @@ ALL Notion operations MUST run in a background sub-agent via `sessions_spawn`. N
 Example spawn task:
 ```
 Run the Notion API script to create a page.
-Script: /home/ubuntu/.openclaw/workspace/skills/notion-writer/scripts/notion_api.py
+Script: SKILL_DIR/scripts/notion_api.py
 Command: python3 <script> create --title "Page Title" --description "desc" --content-file /tmp/notion-content.json
 First write the content JSON to /tmp/notion-content.json, then run the script.
 ```

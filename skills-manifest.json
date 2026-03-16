@@ -1,12 +1,40 @@
 {
-  "last_updated": "2026-03-09T02:01:17Z",
+  "last_updated": "2026-03-16T02:01:23Z",
   "skills": [
+    {
+      "name": "AI-conference-reviewer",
+      "source": "local",
+      "is_symlink": false,
+      "symlink_target": null,
+      "install": "Manually installed"
+    },
+    {
+      "name": "anthropics-skills",
+      "source": "official",
+      "is_symlink": false,
+      "symlink_target": null,
+      "install": "Installed via anthropics-skills plugin"
+    },
     {
       "name": "diff-review",
       "source": "awesome-skills",
       "is_symlink": true,
       "symlink_target": "/home/mingcanxiang_umass_edu/awesome-skills/skills/diff-review",
       "install": "ln -s ~/awesome-skills/skills/diff-review ~/.claude/skills/diff-review"
+    },
+    {
+      "name": "find-skills",
+      "source": "claude-agents-builtin",
+      "is_symlink": true,
+      "symlink_target": "../../.agents/skills/find-skills",
+      "install": "Built-in Claude agent skill"
+    },
+    {
+      "name": "multi-agent-brainstorming",
+      "source": "claude-agents-builtin",
+      "is_symlink": true,
+      "symlink_target": "../../.agents/skills/multi-agent-brainstorming",
+      "install": "Built-in Claude agent skill"
     },
     {
       "name": "notion-organizer",
@@ -30,6 +58,20 @@
       "install": "ln -s ~/awesome-skills/skills/paper-review ~/.claude/skills/paper-review"
     },
     {
+      "name": "pptx",
+      "source": "official",
+      "is_symlink": true,
+      "symlink_target": "anthropics-skills/skills/pptx",
+      "install": "Installed via anthropics-skills plugin"
+    },
+    {
+      "name": "skill-creator",
+      "source": "claude-agents-builtin",
+      "is_symlink": true,
+      "symlink_target": "../../.agents/skills/skill-creator",
+      "install": "Built-in Claude agent skill"
+    },
+    {
       "name": "techdebt",
       "source": "awesome-skills",
       "is_symlink": true,
@@ -42,139 +84,6 @@
       "is_symlink": true,
       "symlink_target": "/home/mingcanxiang_umass_edu/awesome-skills/skills/upload-skills",
       "install": "ln -s ~/awesome-skills/skills/upload-skills ~/.claude/skills/upload-skills"
-    },
-    {
-      "name": "algorithmic-art",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "brand-guidelines",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "canvas-design",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "doc-coauthoring",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "docx",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "frontend-design",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "internal-comms",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "mcp-builder",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "pdf",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "pptx",
-      "source": "official",
-      "is_symlink": true,
-      "symlink_target": "anthropics-skills/skills/pptx",
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "skill-creator",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "slack-gif-creator",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "theme-factory",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "web-artifacts-builder",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "webapp-testing",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "xlsx",
-      "source": "official",
-      "is_symlink": false,
-      "symlink_target": null,
-      "install": "Installed via anthropics-skills plugin"
-    },
-    {
-      "name": "find-skills",
-      "source": "local",
-      "is_symlink": true,
-      "symlink_target": "../../.agents/skills/find-skills",
-      "install": "ln -s ../../.agents/skills/find-skills ~/.claude/skills/find-skills"
-    },
-    {
-      "name": "multi-agent-brainstorming",
-      "source": "local",
-      "is_symlink": true,
-      "symlink_target": "../../.agents/skills/multi-agent-brainstorming",
-      "install": "ln -s ../../.agents/skills/multi-agent-brainstorming ~/.claude/skills/multi-agent-brainstorming"
-    },
-    {
-      "name": "skill-creator",
-      "source": "local",
-      "is_symlink": true,
-      "symlink_target": "../../.agents/skills/skill-creator",
-      "install": "ln -s ../../.agents/skills/skill-creator ~/.claude/skills/skill-creator"
     }
   ]
 }

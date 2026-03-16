@@ -11,12 +11,16 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 import sys
 import requests
 
-TOKEN = "REDACTED"
-DEFAULT_DB = "2f9871232f4580b6bf51e923c03cb30f"
+TOKEN = os.environ.get("NOTION_TOKEN", "")
+if not TOKEN:
+    print("❌ NOTION_TOKEN environment variable not set", file=sys.stderr)
+    sys.exit(1)
+DEFAULT_DB = "YOUR_DATABASE_ID"
 API_VERSION = "2022-06-28"
 BASE_URL = "https://api.notion.com/v1"
 

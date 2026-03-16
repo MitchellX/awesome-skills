@@ -2,7 +2,7 @@
 
 > Claude Code 和 OpenClaw 的精选技能与插件集合
 
-**多智能体工作流** · **LaTeX 处理** · **Notion 集成** · **代码质量** · **远程执行**
+**多智能体工作流** · **LaTeX 处理** · **Notion 集成** · **代码质量** · **远程执行** · **演示文稿**
 
 [![Skills.sh](https://img.shields.io/badge/skills.sh-compatible-blue)](https://skills.sh)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -20,6 +20,7 @@
 - **Notion 自动化** — 程序化创建、组织和更新 Notion 页面
 - **代码质量** — 技术债务扫描与符合规范的 commit 信息生成
 - **远程调度** — 将任务即发即弃地分派到远程 HPC 环境
+- **演示文稿** — 使用 pptxgenjs 创建和编辑 PowerPoint 文件
 - **技能清单** — 追踪所有已安装技能，便于环境迁移
 
 ## 📦 可用技能
@@ -41,11 +42,12 @@
 
 | 技能 | 来源 | 安装命令 |
 |-----|------|---------|
+| AI-conference-reviewer | 本地安装 | 手动安装 |
 | anthropics-skills | Anthropic 官方 | `npx skills add https://github.com/anthropics/anthropic-skills` |
 | pptx | 内部快捷方式 → anthropics-skills | `ln -s anthropics-skills/skills/pptx ~/.claude/skills/pptx` |
-| find-skills | 市场 | `claude skill install find-skills` |
-| multi-agent-brainstorming | 市场 | `claude skill install multi-agent-brainstorming` |
-| skill-creator | 市场 | `claude skill install skill-creator` |
+| find-skills | Claude 智能体内置 | 内置 Claude 智能体技能 |
+| multi-agent-brainstorming | Claude 智能体内置 | 内置 Claude 智能体技能 |
+| skill-creator | Claude 智能体内置 | 内置 Claude 智能体技能 |
 
 ## 🔌 Claude 插件
 
@@ -53,14 +55,14 @@
 
 | 插件 | 版本 | 来源 | 描述 |
 |-----|------|------|------|
-| context7 | 205b6e0b3036 | claude-plugins-official | 大型代码库的上下文管理 |
-| feature-dev | 205b6e0b3036 | claude-plugins-official | 功能开发工作流 |
-| ralph-loop | 205b6e0b3036 | claude-plugins-official | 迭代开发循环 |
-| superpowers | v4.3.1 | claude-plugins-official | 扩展的 Claude 能力 |
-| commit-commands | 205b6e0b3036 | claude-plugins-official | Git commit 辅助工具 |
-| claude-md-management | v1.0.0 | claude-plugins-official | CLAUDE.md 文件管理 |
-| code-review | 205b6e0b3036 | claude-plugins-official | 代码评审工作流 |
-| claude-mem | v10.4.0 | thedotmack | Claude 的持久化内存管理 |
+| context7 | b36fd4b75301 | claude-plugins-official | 大型代码库的上下文管理 |
+| feature-dev | b36fd4b75301 | claude-plugins-official | 功能开发工作流 |
+| ralph-loop | b36fd4b75301 | claude-plugins-official | 迭代开发循环 |
+| superpowers | 5.0.2 | claude-plugins-official | 扩展的 Claude 能力 |
+| commit-commands | b36fd4b75301 | claude-plugins-official | Git commit 辅助工具 |
+| claude-md-management | 1.0.0 | claude-plugins-official | CLAUDE.md 文件管理 |
+| code-review | b36fd4b75301 | claude-plugins-official | 代码评审工作流 |
+| claude-mem | 10.4.0 | thedotmack | Claude 的持久化内存管理 |
 
 插件备份文件存储在 [claude-plugins/](./claude-plugins/) 目录。
 
@@ -71,6 +73,7 @@
 | 技能 | 描述 |
 |-----|------|
 | [notion-writer](./openclaw-skills/notion-writer/) | 创建、读取、更新和查询 Notion 页面，支持丰富的内容块、数据库查询和页面更新 |
+| [pptx](./openclaw-skills/pptx/) | 使用 pptxgenjs 创建和编辑 PowerPoint 演示文稿，支持模板、布局和演讲者备注 |
 | [readme-generator](./openclaw-skills/readme-generator/) | 生成或更新双语 README.md（英文 + 简体中文），自动推断 badge 并智能合并 |
 | [unity-claude](./openclaw-skills/unity-claude/) | 通过 SSH 将 Claude Code 任务分派到 Unity HPC，使用 Ralph Loop、git worktree 隔离，完成后自动通知 |
 
@@ -89,7 +92,7 @@
 jq -r '.skills[].install' skills-manifest.json | while read cmd; do eval "$cmd"; done
 ```
 
-*最近清单更新：2026-03-09*
+*最近清单更新：2026-03-16*
 
 ## 🚀 安装
 
@@ -144,6 +147,7 @@ awesome-skills/
 │   └── upload-skills/
 ├── openclaw-skills/         # OpenClaw 平台技能
 │   ├── notion-writer/
+│   ├── pptx/
 │   ├── readme-generator/
 │   └── unity-claude/
 ├── claude-plugins/          # 插件备份

@@ -1,15 +1,10 @@
 # unity-claude
 
-**[English](README.md) | [简体中文](README_CN.md)**
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Bash](https://img.shields.io/badge/Bash-Script-4EAA25.svg)
-![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-blue)
-![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blueviolet)
 
-Dispatch Claude Code tasks to a remote HPC cluster (Unity) via SSH. Fire-and-forget with instant webhook notifications on completion. An [OpenClaw](https://github.com/nicobailon/openclaw) skill.
+Dispatch Claude Code tasks to a remote HPC cluster (Unity) via SSH. Fire-and-forget with instant webhook notifications on completion. An [OpenClaw](https://github.com/openclaw/openclaw) skill.
 
-## ✨ Features
+## Features
 
 - **Fire & Forget** — SSH dispatch via tmux, walk away, get notified when done
 - **Auto Session Resume** — Same task name auto-resumes the previous session (saves tokens, keeps context)
@@ -18,27 +13,21 @@ Dispatch Claude Code tasks to a remote HPC cluster (Unity) via SSH. Fire-and-for
 - **Ralph Loop** (`--ralph N`) — N iterations with fresh context, plan file as shared state
 - **Git Worktree Isolation** (`--worktree`) — Parallel tasks on the same repo without conflicts
 - **Superpower / Agent Teams** — Multi-agent collaboration via CC's native subagent system
-- **Instant Notifications** — Webhook → OpenClaw `/hooks/agent` (zero polling)
+- **Instant Notifications** — Tailscale Funnel webhook → OpenClaw `/hooks/agent` (zero polling)
 - **Per-Agent Routing** — `-a` flag routes completion to the correct OpenClaw agent
 
-## 🔄 How It Works
+## Architecture
 
-```mermaid
-flowchart TD
-    A[🖥️ OpenClaw Agent] -->|dispatch-to-unity.sh| B[SSH to Unity HPC]
-    B --> C[tmux Session + Claude Code]
-    C --> D{Task Complete?}
-    D -->|Yes| E[Stop Hook: notify-agi.sh]
-    E --> F[POST /hooks/agent]
-    F --> G[🔔 Agent Notified via Discord]
-    D -->|Ralph Loop| C
+```
+dispatch-to-unity.sh -p "prompt" -n "task" -a "agent"
+  → SSH: write task-meta + prompt file on Unity
+  → SSH: tmux new-session → run-task.sh → Claude Code
+    → CC completes → Stop Hook fires → notify-agi.sh
+      → POST /hooks/agent (agentId, sessionKey)
+        → OpenClaw routes to correct agent → Discord notification
 ```
 
-1. The dispatcher SSHs into Unity, writes task metadata, and launches Claude Code inside a tmux session.
-2. When CC finishes, a stop hook fires instantly and POSTs to OpenClaw's webhook endpoint.
-3. OpenClaw routes the notification to the correct agent (specified by `-a`), which delivers it to Discord.
-
-## ⚙️ Parameters
+## Parameters
 
 | Flag | Description |
 |------|-------------|
@@ -55,7 +44,7 @@ flowchart TD
 | `--resume UUID` | Resume explicit session |
 | `--clean` | Clear saved session for this task name |
 
-## 🚀 Usage
+## Usage
 
 ### Simple Dispatch
 
@@ -78,13 +67,13 @@ bash dispatch-to-unity.sh \
 ### Parallel Tasks with Worktree Isolation
 
 ```bash
-# Task A works in .worktrees/refactor-attn/
+# Task A works in .worktrees/task-a/
 bash dispatch-to-unity.sh \
   -p "Refactor linear attention" \
   -n "refactor-attn" -a "code1" \
   -w "~/LightningDiT" --bypass --worktree "refactor-attn"
 
-# Task B works in .worktrees/add-bench/ (same repo, no conflicts)
+# Task B works in .worktrees/task-b/ (same repo, no conflicts)
 bash dispatch-to-unity.sh \
   -p "Add new benchmarks" \
   -n "add-bench" -a "code2" \
@@ -106,12 +95,11 @@ bash dispatch-to-unity.sh \
   -w "~/Project" --bypass
 ```
 
-## 🏗️ Directory Structure
+## Directory Structure
 
 ```
 unity-claude/
 ├── README.md
-├── README_CN.md
 ├── SKILL.md                      # Main skill definition
 └── references/
     ├── architecture.md           # System architecture details
@@ -119,13 +107,13 @@ unity-claude/
     └── superpower.md             # Agent Teams / Superpower mode
 ```
 
-## 📦 Prerequisites
+## Prerequisites
 
-- [OpenClaw](https://github.com/nicobailon/openclaw) installed and configured
+- [OpenClaw](https://github.com/openclaw/openclaw) installed and configured
 - SSH access to remote HPC cluster
 - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed on the remote host
-- Tailscale Funnel or equivalent configured for webhook callbacks
+- Tailscale Funnel configured for webhook notifications (or alternative callback method)
 
-## 📄 License
+## License
 
 MIT License

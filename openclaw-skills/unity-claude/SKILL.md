@@ -11,7 +11,7 @@ ALL dispatch operations MUST run via `sessions_spawn`. Never block the main sess
 
 ## Scripts
 
-All at `/home/ubuntu/.openclaw/workspace/scripts/claude-code/`
+All at `SKILL_DIR/scripts/`
 
 - `dispatch-to-unity.sh` — Main dispatcher (auto-resume + per-agent routing)
 
@@ -31,6 +31,8 @@ All at `/home/ubuntu/.openclaw/workspace/scripts/claude-code/`
 | `--progress` | **PROGRESS.md**: CC logs lessons learned after task completion |
 | `--ralph N` | **Ralph Loop**: Run N iterations, each with fresh context |
 | `--worktree NAME` | Git worktree isolation (see `references/git-worktree.md`) |
+| `--model MODEL` | Override CC model (e.g. `claude-opus-4-6`). 不指定则用 Unity CC 默认配置 |
+| `--effort LEVEL` | Effort level: low, medium, high, max. **Default: max** |
 | `--clean` | Clear saved session for this task name |
 | `--clean-all` | Clear all saved sessions |
 
@@ -155,7 +157,7 @@ dispatch -p "Implement VSA training pipeline with gate compression" -n "vsa-trai
 
 ```
 sessions_spawn task: |
-  bash /home/ubuntu/.openclaw/workspace/scripts/claude-code/dispatch-to-unity.sh \
+  bash SKILL_DIR/scripts/dispatch-to-unity.sh \
     -p "YOUR PROMPT" -n "task-name" -a "main" -w "/home/mingcanxiang_umass_edu/LightningDiT" --bypass
 ```
 

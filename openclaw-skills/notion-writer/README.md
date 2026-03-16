@@ -19,22 +19,6 @@
 - **Background execution** — All operations run in sub-agents via `sessions_spawn` to avoid blocking
 - **Rich formatting** — Support for headings, tables, code blocks, toggles, dividers, and more
 
-## 🔄 How It Works
-
-```mermaid
-flowchart TD
-    A[User Request] --> B{/notion command?}
-    B -->|Yes| C[Parse Subcommand]
-    B -->|Natural language| C
-    C --> D[Spawn Sub-agent]
-    D --> E[Build Content JSON]
-    E --> F[notion_api.py]
-    F --> G[Notion API v2022-06-28]
-    G --> H[Return Result]
-```
-
-All operations are dispatched to a background sub-agent via `sessions_spawn`, keeping the main session responsive. The sub-agent prepares content as JSON blocks, then calls `notion_api.py` which handles authentication and API communication.
-
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -75,8 +59,8 @@ Default configuration (set in `SKILL.md`):
 
 | Setting | Value | Notes |
 |---------|-------|-------|
-| **Token** | `REDACTED` | Integration token |
-| **Default Database** | `2f9871232f4580b6bf51e923c03cb30f` | AI tool database |
+| **Token** | `NOTION_TOKEN` env var | Set in `~/.bashrc` |
+| **Default Database** | `YOUR_DATABASE_ID` | AI tool database |
 | **API Version** | `2022-06-28` | Notion API version |
 | **Base URL** | `https://api.notion.com/v1` | API endpoint |
 

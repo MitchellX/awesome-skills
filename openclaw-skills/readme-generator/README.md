@@ -4,7 +4,7 @@
 
 **Auto-badge inference** · **Bilingual output** · **Smart merge** · **Workflow diagrams** · **OpenClaw native**
 
-![OpenClaw](https://img.shields.io/badge/OpenClaw-Plugin-blue) ![Claude Code](https://img.shields.io/badge/Claude_Code-Skill-blueviolet) ![Shell](https://img.shields.io/badge/Shell-Bash-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
+![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-blue) ![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)
 
 [English](README.md) | [简体中文](README_CN.md)
 
@@ -29,10 +29,9 @@ flowchart TD
     D -->|Yes| E[Smart Merge]
     D -->|No| F[Write Files]
     E --> F
-    F --> G[Commit & Push]
 ```
 
-The skill scans your project structure, detects languages/frameworks/tools, generates appropriate badges, produces bilingual README files following best practices, and intelligently merges with existing content to preserve manual edits.
+The skill analyzes your project structure, detects languages/frameworks/tools, generates appropriate badges, produces bilingual README files following best practices, and intelligently merges with existing content to preserve manual edits.
 
 ## 🚀 Quick Start
 
@@ -68,7 +67,7 @@ readme-generator/
 ├── SKILL.md                      # Main skill documentation
 ├── references/
 │   ├── readme-format.md          # README template specification
-│   └── badge-rules.md           # Badge inference rules
+│   └── badge-rules.md            # Badge inference rules
 └── scripts/
     └── analyze_project.sh        # Project metadata analyzer
 ```
@@ -141,10 +140,6 @@ To improve this skill:
 2. Make your changes
 3. Test with various project types
 4. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the [MIT License](../../LICENSE).
 
 ## 🙏 Acknowledgments
 

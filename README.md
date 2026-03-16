@@ -2,7 +2,7 @@
 
 > A curated collection of powerful skills and plugins for Claude Code and OpenClaw
 
-**Multi-Agent Workflows** · **LaTeX Processing** · **Notion Integration** · **Code Quality** · **Remote Execution**
+**Multi-Agent Workflows** · **LaTeX Processing** · **Notion Integration** · **Code Quality** · **Remote Execution** · **Presentations**
 
 [![Skills.sh](https://img.shields.io/badge/skills.sh-compatible-blue)](https://skills.sh)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -20,6 +20,7 @@
 - **Notion Automation** — Create, organize, and update Notion pages programmatically
 - **Code Quality** — Technical debt scanning and conventional commit generation
 - **Remote Dispatch** — Fire-and-forget tasks to remote HPC environments
+- **Presentations** — Create and edit PowerPoint files with pptxgenjs
 - **Skills Manifest** — Environment migration tracking for all installed skills
 
 ## 📦 Available Skills
@@ -41,11 +42,12 @@ Third-party and official skills installed via marketplace or manual setup (track
 
 | Skill | Source | Install Command |
 |-------|--------|----------------|
+| AI-conference-reviewer | Local | Manually installed |
 | anthropics-skills | Anthropic Official | `npx skills add https://github.com/anthropics/anthropic-skills` |
 | pptx | Internal shortcut → anthropics-skills | `ln -s anthropics-skills/skills/pptx ~/.claude/skills/pptx` |
-| find-skills | Marketplace | `claude skill install find-skills` |
-| multi-agent-brainstorming | Marketplace | `claude skill install multi-agent-brainstorming` |
-| skill-creator | Marketplace | `claude skill install skill-creator` |
+| find-skills | Claude Agents Built-in | Built-in Claude agent skill |
+| multi-agent-brainstorming | Claude Agents Built-in | Built-in Claude agent skill |
+| skill-creator | Claude Agents Built-in | Built-in Claude agent skill |
 
 ## 🔌 Claude Plugins
 
@@ -53,14 +55,14 @@ Installed plugins from [claude-plugins-official](https://github.com/anthropics/c
 
 | Plugin | Version | Source | Description |
 |--------|---------|--------|-------------|
-| context7 | 205b6e0b3036 | claude-plugins-official | Context management for large codebases |
-| feature-dev | 205b6e0b3036 | claude-plugins-official | Feature development workflow |
-| ralph-loop | 205b6e0b3036 | claude-plugins-official | Iterative development loop |
-| superpowers | v4.3.1 | claude-plugins-official | Extended Claude capabilities |
-| commit-commands | 205b6e0b3036 | claude-plugins-official | Git commit helpers |
-| claude-md-management | v1.0.0 | claude-plugins-official | CLAUDE.md file management |
-| code-review | 205b6e0b3036 | claude-plugins-official | Code review workflow |
-| claude-mem | v10.4.0 | thedotmack | Persistent memory management for Claude |
+| context7 | b36fd4b75301 | claude-plugins-official | Context management for large codebases |
+| feature-dev | b36fd4b75301 | claude-plugins-official | Feature development workflow |
+| ralph-loop | b36fd4b75301 | claude-plugins-official | Iterative development loop |
+| superpowers | 5.0.2 | claude-plugins-official | Extended Claude capabilities |
+| commit-commands | b36fd4b75301 | claude-plugins-official | Git commit helpers |
+| claude-md-management | 1.0.0 | claude-plugins-official | CLAUDE.md file management |
+| code-review | b36fd4b75301 | claude-plugins-official | Code review workflow |
+| claude-mem | 10.4.0 | thedotmack | Persistent memory management for Claude |
 
 Plugin backup files are stored in [claude-plugins/](./claude-plugins/).
 
@@ -71,6 +73,7 @@ Skills for the [OpenClaw](https://openclaw.com) agent platform with extended cap
 | Skill | Description |
 |-------|-------------|
 | [notion-writer](./openclaw-skills/notion-writer/) | Create, read, update, and query Notion pages with rich content blocks. Supports database queries and page updates |
+| [pptx](./openclaw-skills/pptx/) | Create and edit PowerPoint presentations using pptxgenjs. Handles .pptx input/output, templates, layouts, and speaker notes |
 | [readme-generator](./openclaw-skills/readme-generator/) | Generate or update bilingual README.md (English + 简体中文) with auto-inferred badges and smart merge |
 | [unity-claude](./openclaw-skills/unity-claude/) | Dispatch Claude Code tasks to Unity HPC via SSH with Ralph Loop, git worktree isolation, and auto-notify on completion |
 
@@ -89,7 +92,7 @@ This enables one-command environment replication:
 jq -r '.skills[].install' skills-manifest.json | while read cmd; do eval "$cmd"; done
 ```
 
-*Last manifest update: 2026-03-09*
+*Last manifest update: 2026-03-16*
 
 ## 🚀 Installation
 
@@ -144,6 +147,7 @@ awesome-skills/
 │   └── upload-skills/
 ├── openclaw-skills/         # OpenClaw platform skills
 │   ├── notion-writer/
+│   ├── pptx/
 │   ├── readme-generator/
 │   └── unity-claude/
 ├── claude-plugins/          # Plugin backups

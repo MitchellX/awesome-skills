@@ -19,22 +19,6 @@
 - **后台执行** — 所有操作通过 `sessions_spawn` 在子 agent 中运行，不阻塞主会话
 - **丰富格式** — 支持标题、表格、代码块、折叠区、分隔线等多种内容类型
 
-## 🔄 工作流程
-
-```mermaid
-flowchart TD
-    A[用户请求] --> B{/notion 命令?}
-    B -->|是| C[解析子命令]
-    B -->|自然语言| C
-    C --> D[启动子 Agent]
-    D --> E[构建 JSON 内容块]
-    E --> F[notion_api.py]
-    F --> G[Notion API v2022-06-28]
-    G --> H[返回结果]
-```
-
-所有操作通过 `sessions_spawn` 派发到后台子 agent 执行，保持主会话流畅。子 agent 将内容构建为 JSON blocks，然后调用 `notion_api.py` 处理认证和 API 通信。
-
 ## 🚀 快速开始
 
 ### 前置要求
@@ -75,8 +59,8 @@ Block 示例见 [`references/block-examples.json`](references/block-examples.jso
 
 | 配置项 | 值 | 说明 |
 |--------|-----|------|
-| **Token** | `REDACTED` | Integration token |
-| **默认数据库** | `2f9871232f4580b6bf51e923c03cb30f` | AI tool 数据库 |
+| **Token** | `NOTION_TOKEN` 环境变量 | 在 `~/.bashrc` 中设置 |
+| **默认数据库** | `YOUR_DATABASE_ID` | AI tool 数据库 |
 | **API 版本** | `2022-06-28` | Notion API 版本 |
 | **Base URL** | `https://api.notion.com/v1` | API 端点 |
 
