@@ -1,6 +1,6 @@
 ---
 name: daily-sync
-description: Daily sync job that snapshots Notion tasks, collects Unity git logs and Claude sessions, backs up settings, and writes weekly memory files. Triggers on daily-sync cron or when user asks to run daily sync. Covers 5 tasks - Notion snapshot+diff, Unity git log, Unity Claude sessions, local agent sessions, settings backup, weekly file update, and git push.
+description: Daily sync job that snapshots Notion tasks, collects Unity git logs and Claude sessions, backs up settings, and writes two weekly files (memory/weekly/ for daily summaries, memory/weekly_codes_update/ for code details). Triggers on daily-sync cron or when user asks to run daily sync.
 ---
 
 # Daily Sync
@@ -80,39 +80,75 @@ bash SKILL_DIR/scripts/05_backup_settings.sh
 - SCP from Unity: `settings.json`, `CLAUDE.md`, `skills/*/SKILL.md` → `workspace/Claude_settings/`
 - Copy `~/.openclaw/cron/jobs.json` → `workspace/cron_backup/jobs.json`
 
-## Phase 2: Write Weekly File
+## Phase 2: Write Two Weekly Files
 
-After all scripts complete, summarize the collected data into the weekly memory file.
+After all scripts complete, write to TWO files:
 
-### Determine the correct file
+### Determine file paths
 
 ```bash
 WEEKLY_FILE=$(python3 SKILL_DIR/scripts/06_weekly_helper.py)
+# e.g. memory/weekly/W12-2026-03-16.md
+# The codes file uses the same week naming:
+CODES_FILE=$(echo $WEEKLY_FILE | sed 's|/weekly/|/weekly_codes_update/|')
 ```
 
-### Content sources to read and summarize
+### File A: `memory/weekly_codes_update/W{nn}-YYYY-MM-DD.md` — 代码详情
 
-1. `/tmp/daily-sync/notion_diff.md` — Task changes (new, status changes, completed)
-2. `/tmp/daily-sync/git_log.md` — Code commits
-3. `/tmp/daily-sync/unity_sessions/*.jsonl` — What Mitchell and Claude discussed on Unity
-4. `/tmp/daily-sync/agent_sessions/*.jsonl` — What Mitchell did across all agents
+Detailed technical log of code changes, sessions, and stats.
 
-### Writing format
+**Content sources:**
+1. `/tmp/daily-sync/git_log.md` — Full commit hashes and messages
+2. `/tmp/daily-sync/unity_sessions/*.jsonl` — What Mitchell and Claude discussed (detailed)
+3. `/tmp/daily-sync/agent_sessions/*.jsonl` — Per-agent session details
 
-- Append to the weekly file (do NOT overwrite)
-- Section header: `## YYYY-MM-DD (DayName)`
-- Write in bullet points, concise but detailed
-- Group by topic, not by source
-- Focus on: what was done, decisions made, problems found, things learned
-- See `references/example-weekly.md` for format reference
+**Format:** See `references/example-weekly-codes.md`
+- Section: `## YYYY-MM-DD (DayName)`
+- Include: 💻 Code (full git log), 🤖 Claude on Unity (session-by-session detail), 💬 Agent Sessions (table), 📊 Stats
+- Append daily, don't overwrite
+
+### File B: `memory/weekly/W{nn}-YYYY-MM-DD.md` — 每日综合总结
+
+High-level daily summary covering ALL aspects of Mitchell's day.
+
+**Content sources:** ALL of `/tmp/daily-sync/` + File A as reference
+
+**Format:** See `references/example-weekly.md`
+- Section: `## YYYY-MM-DD (DayName)`
+- Subsections by topic (use ### headers):
+  - 🛠️ 工程 & 研究 — what was built, experimented, discovered
+  - 💻 代码 — **brief summary only** + "详见 `memory/weekly_codes_update/`"
+  - 📋 Notion 任务 — changes (completed/new/status changes), totals
+  - 🔍 调研 — papers read, tools researched, conclusions
+  - 💰 生活 & 个人 — non-work events (meals, travel, finance, etc.)
+  - 🧠 系统改进 — OpenClaw/bot/skill changes
+  - 📬 邮件 & 其他 — important emails, misc
+- Skip empty subsections
+- Be detailed! This is the main daily record Mitchell will read
+- Append daily, don't overwrite
+
+### Key difference
+
+| | weekly/ | weekly_codes_update/ |
+|-|---------|---------------------|
+| 范围 | Mitchell 的一天（全面） | 只有代码/session 技术细节 |
+| 代码 | 一句话总结 + 索引 | 完整 git log + session 内容 |
+| 受众 | Mitchell 快速浏览 | 需要查代码细节时参考 |
 
 ### If no activity
 
-If all sources are empty (no commits, no sessions, no task changes), write:
+weekly/:
 ```
 ## YYYY-MM-DD (DayName)
 
 - 安静的一天，没有代码/研究活动
+```
+
+weekly_codes_update/:
+```
+## YYYY-MM-DD (DayName)
+
+- 无新 commit，无活跃 session
 ```
 
 ## Phase 3: Git Sync
