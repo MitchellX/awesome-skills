@@ -1,66 +1,94 @@
 #!/bin/bash
-# Clean up /tmp: remove daily-sync working dir and stale temp files
-# Safe: only deletes known patterns, never touches openclaw/jiti/systemd/tmux/vscode
+# Scan /tmp for stale files and generate cleanup candidates
+# Does NOT delete anything — outputs a candidate list for AI review
+#
+# Output: /tmp/daily-sync/cleanup_tmp_candidates.md
 
 set -euo pipefail
+OUTPUT="${1:-/tmp/daily-sync}/cleanup_tmp_candidates.md"
+mkdir -p "$(dirname "$OUTPUT")"
 
-echo "🧹 Cleaning up /tmp..."
+cat > "$OUTPUT" << 'HEADER'
+# /tmp Cleanup Candidates
 
-FREED=0
+Review each section. For each item, decide: DELETE or KEEP.
+After review, run the delete commands.
 
-# /tmp/daily-sync/ 不清理 — 只有 ~300KB，下次 Phase 1 会自动覆盖
+HEADER
 
-# 1. Remove known stale temp dirs (skill packaging, pip venvs, node_modules)
+# 1. Known stale directories
+echo "## Stale Directories" >> "$OUTPUT"
+FOUND=0
 for dir in /tmp/add-skill-* /tmp/weasy-env /tmp/node_modules /tmp/paper-review /tmp/chromium-*; do
     if [ -d "$dir" ]; then
-        SIZE=$(du -sm "$dir" 2>/dev/null | cut -f1)
-        rm -rf "$dir"
-        echo "   ✅ $dir (${SIZE}MB)"
-        FREED=$((FREED + SIZE))
+        SIZE=$(du -sh "$dir" 2>/dev/null | cut -f1)
+        NEWEST=$(find "$dir" -type f -printf '%T+\n' 2>/dev/null | sort -r | head -1)
+        echo "- [ ] \`$dir\` — $SIZE, newest file: ${NEWEST:-unknown}" >> "$OUTPUT"
+        FOUND=$((FOUND + 1))
     fi
 done
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 3. Remove stale temp files older than 7 days (known safe patterns)
-STALE_PATTERNS=(
-    "notion_*.json"
-    "notion_*.txt"
-    "unity_*.json"
-    "unity_*.txt"
-    "unity_*.md"
-    "linstat*.json"
-    "linstat*.png"
-    "linstat*.tex"
-    "linstat*.py"
-    "*-skill.md"
-    "updated-skill.md"
-    "awesome-skills-readme.md"
+# 2. Stale temp files older than 7 days (known patterns)
+echo "## Stale Files (>7 days)" >> "$OUTPUT"
+FOUND=0
+PATTERNS=(
+    "notion_*.json" "notion_*.txt"
+    "unity_*.json" "unity_*.txt" "unity_*.md"
+    "linstat*.json" "linstat*.png" "linstat*.tex" "linstat*.py"
+    "*-skill.md" "updated-skill.md" "awesome-skills-readme.md"
     "codex-*.log"
-    "voice_msg.wav"
-    "*.m4a"
-    "yt_*.m4a"
+    "voice_msg.wav" "*.m4a" "yt_*.m4a"
     "package-lock.json"
 )
-
-STALE_COUNT=0
-for pattern in "${STALE_PATTERNS[@]}"; do
-    while IFS= read -r file; do
-        [ -z "$file" ] && continue
-        SIZE_KB=$(du -sk "$file" 2>/dev/null | cut -f1)
-        rm -f "$file"
-        echo "   ✅ $file (${SIZE_KB}KB)"
-        STALE_COUNT=$((STALE_COUNT + 1))
+for pattern in "${PATTERNS[@]}"; do
+    while IFS= read -r f; do
+        [ -z "$f" ] && continue
+        SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+        DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+        NAME=$(basename "$f")
+        echo "- [ ] \`$NAME\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+        FOUND=$((FOUND + 1))
     done < <(find /tmp -maxdepth 1 -name "$pattern" -mtime +7 2>/dev/null)
 done
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 4. Remove Notion content temp files (created by notion-writer skill)
-for file in /tmp/notion-content.json /tmp/notion-content-*.json; do
-    if [ -f "$file" ] && [ "$(find "$file" -mtime +1 2>/dev/null)" ]; then
-        rm -f "$file"
-        echo "   ✅ $file (stale >1 day)"
-        STALE_COUNT=$((STALE_COUNT + 1))
+# 3. Old notion-content temp files (>1 day)
+echo "## Notion Content Temp Files (>1 day)" >> "$OUTPUT"
+FOUND=0
+for f in /tmp/notion-content.json /tmp/notion-content-*.json; do
+    if [ -f "$f" ] && [ "$(find "$f" -mtime +1 2>/dev/null)" ]; then
+        SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+        DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+        echo "- [ ] \`$(basename "$f")\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+        FOUND=$((FOUND + 1))
     fi
 done
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-echo ""
-echo "   Freed ~${FREED}MB from dirs, removed $STALE_COUNT stale files."
-echo "   ⚠️ Preserved: openclaw/, jiti/, tmux/, systemd/, vscode/ (runtime dirs)"
+# 4. Other unrecognized large files (>1MB, >7 days, not in protected dirs)
+echo "## Other Large Files (>1MB, >7 days)" >> "$OUTPUT"
+FOUND=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+    DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+    NAME=$(basename "$f")
+    echo "- [ ] \`$NAME\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+    FOUND=$((FOUND + 1))
+done < <(find /tmp -maxdepth 1 -type f -size +1M -mtime +7 2>/dev/null | sort)
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
+
+# Summary
+TOTAL=$(grep -c '^\- \[ \]' "$OUTPUT" 2>/dev/null || echo 0)
+echo "---" >> "$OUTPUT"
+echo "**Total candidates: $TOTAL**" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
+echo "⚠️ Protected (never delete): \`openclaw*/\`, \`jiti/\`, \`tmux-*/\`, \`systemd-*/\`, \`vscode-*/\`, \`claude-*/\`, \`daily-sync/\`" >> "$OUTPUT"
+
+echo "📋 Scan complete: $TOTAL candidates → $OUTPUT"
+cat "$OUTPUT"

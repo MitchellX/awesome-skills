@@ -134,16 +134,25 @@ The cron job message should simply be:
 
 ## Phase 4: Cleanup
 
-### 4a. Clean /tmp
+### 4a. Clean /tmp (AI-reviewed)
+
+**Step 1: Scan**
 
 ```bash
 bash SKILL_DIR/scripts/07_cleanup_tmp.sh
 ```
 
-- Removes known stale dirs: `add-skill-*`, `weasy-env`, `node_modules`, `paper-review`, `chromium-*`
-- Removes stale temp files older than 7 days matching known patterns (notion_*, unity_*, linstat*, etc.)
-- Cleans up old notion-content JSON files (>1 day)
-- ⚠️ Never touches: `openclaw/`, `jiti/`, `tmux-*`, `systemd-*`, `vscode-*`, `claude-*`
+Output: `/tmp/daily-sync/cleanup_tmp_candidates.md` — checklist of stale dirs/files.
+
+**Step 2: AI Review** — read the candidate list and decide for each item:
+- `add-skill-*`, `weasy-env`, `node_modules` → one-off installs, safe to delete
+- `notion_*`, `unity_*`, `linstat*` >7 days → old temp data, usually safe
+- Large files >1MB >7 days → check name/extension, delete if clearly temp
+- When in doubt, KEEP
+
+**Step 3: Delete** — run `rm` commands only for confirmed items
+
+- ⚠️ Never touches: `openclaw/`, `jiti/`, `tmux-*`, `systemd-*`, `vscode-*`, `claude-*`, `daily-sync/`
 
 ### 4b. Clean workspace (AI-reviewed)
 
