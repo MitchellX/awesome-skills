@@ -132,17 +132,31 @@ The cron job message should simply be:
 执行 daily-sync skill。读取 skill 的 SKILL.md 并按流程执行所有 Phase。
 ```
 
-## Phase 4: Cleanup /tmp
+## Phase 4: Cleanup
+
+### 4a. Clean /tmp
 
 ```bash
 bash SKILL_DIR/scripts/07_cleanup_tmp.sh
 ```
 
-- `/tmp/daily-sync/` 不删（~300KB，下次 Phase 1 自动覆盖）
 - Removes known stale dirs: `add-skill-*`, `weasy-env`, `node_modules`, `paper-review`, `chromium-*`
 - Removes stale temp files older than 7 days matching known patterns (notion_*, unity_*, linstat*, etc.)
 - Cleans up old notion-content JSON files (>1 day)
 - ⚠️ Never touches: `openclaw/`, `jiti/`, `tmux-*`, `systemd-*`, `vscode-*`, `claude-*`
+
+### 4b. Clean workspace
+
+```bash
+bash SKILL_DIR/scripts/08_cleanup_workspace.sh
+```
+
+- Removes root-level PDFs/PNGs older than 14 days (reviewed papers, temp charts)
+- Removes legacy scripts replaced by skills (notion_*.py, *.skill)
+- Removes stale dirs: `temp/`, `skills-for-unity/`, `data/codex-search-results/`
+- `weekly_codes_update/`: keeps last 7 days, deletes older files
+- `media/`: removes original PNGs when optimized version exists
+- ⚠️ Never touches: `memory/`, `skills/`, `scripts/`, `gmail/`, `Claude_settings/`, `cron_backup/`, `notion_snapshots/`, core .md files
 
 ## Troubleshooting
 
