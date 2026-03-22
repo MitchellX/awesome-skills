@@ -1,153 +1,114 @@
 #!/bin/bash
-# Clean up stale/temp files in ~/.openclaw/workspace
-# Run as Phase 4b after /tmp cleanup
-# Safe: only deletes known stale patterns, preserves core files
+# Scan workspace for stale/temp files and generate cleanup candidates
+# Does NOT delete anything — outputs a candidate list for AI review
+#
+# Output: /tmp/daily-sync/cleanup_candidates.md
 
 set -euo pipefail
 WORKSPACE="$HOME/.openclaw/workspace"
+OUTPUT="${1:-/tmp/daily-sync}/cleanup_candidates.md"
+mkdir -p "$(dirname "$OUTPUT")"
+
 cd "$WORKSPACE"
 
-echo "🧹 Cleaning up workspace stale files..."
+cat > "$OUTPUT" << 'HEADER'
+# Workspace Cleanup Candidates
 
-FREED_KB=0
-REMOVED=0
+Review each section. For each file/dir, decide: DELETE or KEEP.
+After review, run the delete commands.
 
-# Helper: remove file and track
-remove_file() {
-    local f="$1"
-    if [ -f "$f" ]; then
-        local sz
-        sz=$(du -sk "$f" 2>/dev/null | cut -f1)
-        rm -f "$f"
-        echo "   ✅ $f (${sz}KB)"
-        FREED_KB=$((FREED_KB + sz))
-        REMOVED=$((REMOVED + 1))
-    fi
-}
+HEADER
 
-# Helper: remove dir and track
-remove_dir() {
-    local d="$1"
-    if [ -d "$d" ]; then
-        local sz
-        sz=$(du -sm "$d" 2>/dev/null | cut -f1)
-        rm -rf "$d"
-        echo "   ✅ $d/ (${sz}MB)"
-        FREED_KB=$((FREED_KB + sz * 1024))
-        REMOVED=$((REMOVED + 1))
-    fi
-}
+# 1. Root-level PDFs older than 14 days
+echo "## Root PDFs (>14 days)" >> "$OUTPUT"
+FOUND=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+    DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+    NAME=$(basename "$f")
+    echo "- [ ] \`$NAME\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+    FOUND=$((FOUND + 1))
+done < <(find . -maxdepth 1 -name "*.pdf" -mtime +14 2>/dev/null)
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 1. Old root-level PDFs (ICLR papers, already reviewed)
-for f in "$WORKSPACE"/*.pdf; do
-    [ -f "$f" ] || continue
-    # Only delete PDFs older than 14 days
-    if [ "$(find "$f" -mtime +14 2>/dev/null)" ]; then
-        remove_file "$f"
-    fi
-done
+# 2. Root-level images older than 14 days
+echo "## Root Images (>14 days)" >> "$OUTPUT"
+FOUND=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+    DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+    NAME=$(basename "$f")
+    echo "- [ ] \`$NAME\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+    FOUND=$((FOUND + 1))
+done < <(find . -maxdepth 1 \( -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.gif" \) -mtime +14 2>/dev/null | sort)
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 2. Old root-level PNGs that are clearly temp (linstat_*, training_curves_*, model_complexity_*, ppt_*, sparsity_*)
-STALE_IMG_PATTERNS=(
-    "linstat_*.png"
-    "linstat_*.pdf"
-    "linstat_avatar*.png"
-    "training_curves_*.png"
-    "training_curves_*.pdf"
-    "model_complexity_*.png"
-    "ppt_*.png"
-    "sparsity_*.png"
-    "ai_everywhere.png"
-)
-for pattern in "${STALE_IMG_PATTERNS[@]}"; do
-    for f in $WORKSPACE/$pattern; do
-        [ -f "$f" ] || continue
-        if [ "$(find "$f" -mtime +14 2>/dev/null)" ]; then
-            remove_file "$f"
-        fi
-    done
-done
+# 3. Root-level scripts/misc older than 14 days
+echo "## Root Scripts & Misc (>14 days)" >> "$OUTPUT"
+FOUND=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+    DATE=$(stat -c '%y' "$f" 2>/dev/null | cut -d' ' -f1)
+    NAME=$(basename "$f")
+    echo "- [ ] \`$NAME\` — $SIZE, last modified $DATE" >> "$OUTPUT"
+    FOUND=$((FOUND + 1))
+done < <(find . -maxdepth 1 \( -name "*.py" -o -name "*.skill" -o -name "*.html" -o -name "*.tex" \) -mtime +14 2>/dev/null | sort)
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 3. Old markdown files that were one-off analysis
-for f in "$WORKSPACE"/linstat_eccv_review.md "$WORKSPACE"/linstat_overview_prompt.md; do
-    if [ -f "$f" ] && [ "$(find "$f" -mtime +14 2>/dev/null)" ]; then
-        remove_file "$f"
+# 4. Stale directories
+echo "## Potentially Stale Directories" >> "$OUTPUT"
+for d in temp skills-for-unity data/codex-search-results; do
+    if [ -d "$WORKSPACE/$d" ]; then
+        SIZE=$(du -sh "$WORKSPACE/$d" 2>/dev/null | cut -f1)
+        NEWEST=$(find "$WORKSPACE/$d" -type f -printf '%T+\n' 2>/dev/null | sort -r | head -1)
+        FILE_COUNT=$(find "$WORKSPACE/$d" -type f 2>/dev/null | wc -l)
+        echo "- [ ] \`$d/\` — $SIZE, $FILE_COUNT files, newest: ${NEWEST:-unknown}" >> "$OUTPUT"
     fi
 done
+echo "" >> "$OUTPUT"
 
-# 4. Legacy Python scripts (replaced by notion-writer skill)
-for f in "$WORKSPACE"/notion_append.py "$WORKSPACE"/notion_todo.py "$WORKSPACE"/update_notion.py; do
-    if [ -f "$f" ] && [ "$(find "$f" -mtime +14 2>/dev/null)" ]; then
-        remove_file "$f"
+# 5. weekly_codes_update older than 7 days
+echo "## weekly_codes_update (>7 days, superseded by memory/weekly/)" >> "$OUTPUT"
+FOUND=0
+while IFS= read -r f; do
+    [ -z "$f" ] && continue
+    SIZE=$(du -sh "$f" 2>/dev/null | cut -f1)
+    NAME=$(basename "$f")
+    echo "- [ ] \`$NAME\` — $SIZE" >> "$OUTPUT"
+    FOUND=$((FOUND + 1))
+done < <(find "$WORKSPACE/weekly_codes_update" -name "*.md" -mtime +7 2>/dev/null | sort)
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
+
+# 6. media/ originals with optimized versions
+echo "## media/ Originals (optimized version exists)" >> "$OUTPUT"
+FOUND=0
+for opt in "$WORKSPACE"/media/*-optimized.png; do
+    [ -f "$opt" ] || continue
+    original="${opt%-optimized.png}.png"
+    if [ -f "$original" ]; then
+        ORIG_SIZE=$(du -sh "$original" 2>/dev/null | cut -f1)
+        OPT_SIZE=$(du -sh "$opt" 2>/dev/null | cut -f1)
+        NAME=$(basename "$original")
+        echo "- [ ] \`$NAME\` ($ORIG_SIZE) → optimized: $OPT_SIZE" >> "$OUTPUT"
+        FOUND=$((FOUND + 1))
     fi
 done
+[ "$FOUND" -eq 0 ] && echo "_None_" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
 
-# 5. Old .skill packaging files
-for f in "$WORKSPACE"/*.skill; do
-    [ -f "$f" ] || continue
-    if [ "$(find "$f" -mtime +14 2>/dev/null)" ]; then
-        remove_file "$f"
-    fi
-done
+# Summary
+TOTAL=$(grep -c '^\- \[ \]' "$OUTPUT" 2>/dev/null || echo 0)
+echo "---" >> "$OUTPUT"
+echo "**Total candidates: $TOTAL**" >> "$OUTPUT"
+echo "" >> "$OUTPUT"
+echo "⚠️ Protected (never delete): memory/, skills/, scripts/, gmail/, Claude_settings/, cron_backup/, notion_snapshots/, *.md in root (MEMORY.md, SOUL.md, etc.)" >> "$OUTPUT"
 
-# 6. Stale directories
-#    temp/ — one-off file generation (fax, pptx, etc.)
-if [ -d "$WORKSPACE/temp" ]; then
-    # Only if all contents are >14 days old
-    FRESH=$(find "$WORKSPACE/temp" -type f -mtime -14 2>/dev/null | head -1)
-    if [ -z "$FRESH" ]; then
-        remove_dir "$WORKSPACE/temp"
-    fi
-fi
-
-#    skills-for-unity/ — old skill transfer dir, replaced by awesome-skills
-remove_dir "$WORKSPACE/skills-for-unity"
-
-#    data/codex-search-results/ — one-off deep search output
-if [ -d "$WORKSPACE/data/codex-search-results" ]; then
-    FRESH=$(find "$WORKSPACE/data/codex-search-results" -type f -mtime -14 2>/dev/null | head -1)
-    if [ -z "$FRESH" ]; then
-        remove_dir "$WORKSPACE/data/codex-search-results"
-        # Remove data/ if now empty
-        rmdir "$WORKSPACE/data" 2>/dev/null || true
-    fi
-fi
-
-# 7. weekly_codes_update/ — legacy daily files, superseded by memory/weekly/
-#    Keep last 7 days, delete older files
-if [ -d "$WORKSPACE/weekly_codes_update" ]; then
-    OLD_COUNT=0
-    while IFS= read -r f; do
-        [ -z "$f" ] && continue
-        rm -f "$f"
-        OLD_COUNT=$((OLD_COUNT + 1))
-    done < <(find "$WORKSPACE/weekly_codes_update" -name "*.md" -mtime +7 2>/dev/null)
-    if [ "$OLD_COUNT" -gt 0 ]; then
-        echo "   ✅ weekly_codes_update/: removed $OLD_COUNT old files (kept last 7 days)"
-        REMOVED=$((REMOVED + OLD_COUNT))
-    fi
-fi
-
-# 8. media/ — keep optimized versions, remove originals if optimized exists
-if [ -d "$WORKSPACE/media" ]; then
-    MEDIA_CLEANED=0
-    for opt in "$WORKSPACE"/media/*-optimized.png; do
-        [ -f "$opt" ] || continue
-        original="${opt%-optimized.png}.png"
-        if [ -f "$original" ]; then
-            sz=$(du -sk "$original" 2>/dev/null | cut -f1)
-            rm -f "$original"
-            echo "   ✅ $(basename "$original") → kept optimized (saved ${sz}KB)"
-            FREED_KB=$((FREED_KB + sz))
-            MEDIA_CLEANED=$((MEDIA_CLEANED + 1))
-        fi
-    done
-    if [ "$MEDIA_CLEANED" -gt 0 ]; then
-        REMOVED=$((REMOVED + MEDIA_CLEANED))
-    fi
-fi
-
-echo ""
-FREED_MB=$((FREED_KB / 1024))
-echo "   Removed $REMOVED items, freed ~${FREED_MB}MB"
-echo "   ⚠️ Preserved: memory/, skills/, scripts/, gmail/, Claude_settings/, cron_backup/, notion_snapshots/"
+echo "📋 Scan complete: $TOTAL candidates → $OUTPUT"
+cat "$OUTPUT"

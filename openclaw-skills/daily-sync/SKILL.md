@@ -145,17 +145,33 @@ bash SKILL_DIR/scripts/07_cleanup_tmp.sh
 - Cleans up old notion-content JSON files (>1 day)
 - ⚠️ Never touches: `openclaw/`, `jiti/`, `tmux-*`, `systemd-*`, `vscode-*`, `claude-*`
 
-### 4b. Clean workspace
+### 4b. Clean workspace (AI-reviewed)
+
+**Step 1: Scan** — generate candidate list
 
 ```bash
 bash SKILL_DIR/scripts/08_cleanup_workspace.sh
 ```
 
-- Removes root-level PDFs/PNGs older than 14 days (reviewed papers, temp charts)
-- Removes legacy scripts replaced by skills (notion_*.py, *.skill)
-- Removes stale dirs: `temp/`, `skills-for-unity/`, `data/codex-search-results/`
-- `weekly_codes_update/`: keeps last 7 days, deletes older files
-- `media/`: removes original PNGs when optimized version exists
+Output: `/tmp/daily-sync/cleanup_candidates.md` — checklist of files/dirs that may be stale.
+
+**Step 2: AI Review** — read the candidate list and decide for each item:
+- Consider: is this file still referenced? Was it a one-off or ongoing?
+- PDFs older than 14 days with paper-like names → likely reviewed, safe to delete
+- Root images (linstat_*, training_curves_*, ppt_*) → temp visualizations, safe to delete
+- Legacy .py/.skill files superseded by skills → safe to delete
+- `weekly_codes_update/*.md` >7 days → superseded by `memory/weekly/`, safe to delete
+- `media/` originals when optimized exists → keep optimized, delete original
+- When in doubt, KEEP
+
+**Step 3: Delete** — run `rm` commands only for items you decided to delete
+
+```bash
+# Example (only after AI review):
+rm -f ~/.openclaw/workspace/some_old_file.pdf
+rm -rf ~/.openclaw/workspace/temp/
+```
+
 - ⚠️ Never touches: `memory/`, `skills/`, `scripts/`, `gmail/`, `Claude_settings/`, `cron_backup/`, `notion_snapshots/`, core .md files
 
 ## Troubleshooting
