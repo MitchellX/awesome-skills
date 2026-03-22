@@ -1,6 +1,6 @@
 ---
 name: daily-sync
-description: Daily sync job that snapshots Notion tasks, collects Unity git logs and Claude sessions, backs up settings, and writes two weekly files (memory/weekly/ for daily summaries, memory/weekly_codes_update/ for code details). Triggers on daily-sync cron or when user asks to run daily sync.
+description: Daily sync job that snapshots Notion tasks, collects Unity git logs and Claude sessions, backs up settings, and writes two weekly files (memory/weekly_memory/ for daily summaries, memory/weekly_codes_update/ for code-only details). Triggers on daily-sync cron or when user asks to run daily sync.
 ---
 
 # Daily Sync
@@ -88,26 +88,26 @@ After all scripts complete, write to TWO files:
 
 ```bash
 WEEKLY_FILE=$(python3 SKILL_DIR/scripts/06_weekly_helper.py)
-# e.g. memory/weekly/W12-2026-03-16.md
+# e.g. memory/weekly_memory/W12-2026-03-16.md
 # The codes file uses the same week naming:
-CODES_FILE=$(echo $WEEKLY_FILE | sed 's|/weekly/|/weekly_codes_update/|')
+CODES_FILE=$(echo $WEEKLY_FILE | sed 's|/weekly_memory/|/weekly_codes_update/|')
 ```
 
-### File A: `memory/weekly_codes_update/W{nn}-YYYY-MM-DD.md` — 代码详情
+### File A: `memory/weekly_codes_update/W{nn}-YYYY-MM-DD.md` — 代码详情 ONLY
 
-Detailed technical log of code changes, sessions, and stats.
+Code-only log. No tasks, no emails, no daily summary — those go in weekly_memory.
 
 **Content sources:**
 1. `/tmp/daily-sync/git_log.md` — Full commit hashes and messages
-2. `/tmp/daily-sync/unity_sessions/*.jsonl` — What Mitchell and Claude discussed (detailed)
-3. `/tmp/daily-sync/agent_sessions/*.jsonl` — Per-agent session details
+2. `/tmp/daily-sync/unity_sessions/*.jsonl` — What code was discussed/changed on Unity
 
 **Format:** See `references/example-weekly-codes.md`
 - Section: `## YYYY-MM-DD (DayName)`
-- Include: 💻 Code (full git log), 🤖 Claude on Unity (session-by-session detail), 💬 Agent Sessions (table), 📊 Stats
+- Include ONLY: 💻 Code (full git log + diff summary), 🤖 Claude on Unity (code-related session details)
+- NO tasks, NO emails, NO daily summary, NO agent session summary
 - Append daily, don't overwrite
 
-### File B: `memory/weekly/W{nn}-YYYY-MM-DD.md` — 每日综合总结
+### File B: `memory/weekly_memory/W{nn}-YYYY-MM-DD.md` — 每日综合总结
 
 High-level daily summary covering ALL aspects of Mitchell's day.
 
@@ -129,7 +129,7 @@ High-level daily summary covering ALL aspects of Mitchell's day.
 
 ### Key difference
 
-| | weekly/ | weekly_codes_update/ |
+| | weekly_memory/ | weekly_codes_update/ |
 |-|---------|---------------------|
 | 范围 | Mitchell 的一天（全面） | 只有代码/session 技术细节 |
 | 代码 | 一句话总结 + 索引 | 完整 git log + session 内容 |
@@ -137,7 +137,7 @@ High-level daily summary covering ALL aspects of Mitchell's day.
 
 ### If no activity
 
-weekly/:
+weekly_memory/:
 ```
 ## YYYY-MM-DD (DayName)
 

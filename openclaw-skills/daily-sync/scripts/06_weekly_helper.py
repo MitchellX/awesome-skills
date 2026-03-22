@@ -11,7 +11,7 @@ import argparse
 import os
 from datetime import datetime, timedelta
 
-WEEKLY_DIR = os.path.expanduser("~/.openclaw/workspace/memory/weekly")
+WEEKLY_DIR = os.path.expanduser("~/.openclaw/workspace/memory/weekly_memory")
 CODES_DIR = os.path.expanduser("~/.openclaw/workspace/memory/weekly_codes_update")
 
 

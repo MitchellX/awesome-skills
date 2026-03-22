@@ -5,18 +5,34 @@
 ### 🛠️ 工程 & 研究
 - **LinStat 显存优化深入分析** — Mitchell 用 Unity Claude Code 做了大量工作：
   - 完成 MixedHeadAttention 显存 profiling 报告
-  - 发现 6.5x VRAM 开销的三因素复合：理论 2.2x × 非编译 1.5x × compile 碎片化 1.5x
-  - 实施了 QKV 权重预排列优化（测试全通过 18/18），但 max_batch 未改善
+  - 发现 6.5x VRAM 开销的三因素复合
 - 💻 代码：2 commits on LightningDiT（详见 `memory/weekly_codes_update/`）
 
 ### 📋 Notion 任务
-- ✅ 完成: supplementary title 任务
-- 新增 3 个任务（个人网站、继续研究、定期清理 session）
-- 总数 72 (+3)
+
+**状态变化**
+
+| 任务 | 变化 |
+|------|------|
+| 回去主要是先看YouTube 视频 | Reminders → Done |
+| 测试一下Claude桌面端端 dispatch | Reminders → Done |
+| 整理我的两个cron job | Reminders → Done |
+
+**新增任务 (+4)**
+
+| 状态 | 任务 |
+|------|------|
+| Reminders | 把每个agents赋予/match到unity对应的repo上 |
+| Doing | 多做成: skills |
+| Reminders | 研究小红书的 auto research 实例们 |
+| Reminders | 把 claude code 官方discord plugin也装在 unity CC上面 |
+
+**删除任务 (-1)**
+
+- ~~AliceLJY/telegram-ai-bridge 也研究一下~~ [Reminders]
 
 ### 📬 邮件 & 其他
 - USCIS 案件有新动态 — 需要登录查看
-- OpenClaw reviewer agent 同步了 paper-polish-skill
 - Weekly cleanup cron 清理 42 个过期文件
 
 ## 2026-03-17 (Tuesday)
@@ -35,14 +51,25 @@
 ## 2026-03-18 (Wednesday)
 
 ### 💰 生活 & 个人
-- 和 reviewer agent 深入研究 UMass OBRA 退休金计划（扣 7.5%，管理平台 Empower）
+- 和 reviewer agent 深入研究 UMass OBRA 退休金计划
 - 🎉 Fidelity Visa Signature 信用卡获批，$27,000 额度
 
 ### 🧠 系统改进
-- memory-lancedb-pro v1.1.0-beta.9 安装完成（Jina embedding + Gemini extraction）
+- memory-lancedb-pro v1.1.0-beta.9 安装完成
 
 ### 📋 Notion 任务
-- 新增 7 个任务（YouTube、Telegram bridge、dispatch 通用化等）
+
+**新增任务 (+7)**
+
+| 状态 | 任务 |
+|------|------|
+| Not Started | 回去主要是先看YouTube 视频 |
+| Not Started | AliceLJY/telegram-ai-bridge 也研究一下 |
+| Not Started | 测试一下Claude桌面端端 dispatch |
+| Not Started | 可以定时cron job 清理30天内没有信息的 session |
+| Not Started | 参考这个人更新一下我的 readme |
+| Not Started | Claude for chrome 有什么可以研究的吗? |
+| Not Started | 研究一下: Ruflo |
 
 ### 💻 代码
 - 无新 commit（详见 `memory/weekly_codes_update/`）
