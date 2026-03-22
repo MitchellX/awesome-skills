@@ -205,7 +205,7 @@ Output: `/tmp/daily-sync/cleanup_candidates.md` — checklist of files/dirs that
 - PDFs older than 14 days with paper-like names → likely reviewed, safe to delete
 - Root images (linstat_*, training_curves_*, ppt_*) → temp visualizations, safe to delete
 - Legacy .py/.skill files superseded by skills → safe to delete
-- `weekly_codes_update/*.md` >7 days → superseded by `memory/weekly/`, safe to delete
+- `weekly_codes_update/*.md` with daily naming (YYYY-MM-DD.md) → old format, should have been merged into weekly files
 - `media/` originals when optimized exists → keep optimized, delete original
 - When in doubt, KEEP
 

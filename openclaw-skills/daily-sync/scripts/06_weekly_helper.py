@@ -12,6 +12,7 @@ import os
 from datetime import datetime, timedelta
 
 WEEKLY_DIR = os.path.expanduser("~/.openclaw/workspace/memory/weekly")
+CODES_DIR = os.path.expanduser("~/.openclaw/workspace/memory/weekly_codes_update")
 
 
 def get_weekly_info(date: datetime) -> tuple[str, int, datetime, datetime]:
@@ -39,6 +40,9 @@ def main():
     filepath = os.path.join(WEEKLY_DIR, filename)
 
     os.makedirs(WEEKLY_DIR, exist_ok=True)
+    os.makedirs(CODES_DIR, exist_ok=True)
+
+    codes_filepath = os.path.join(CODES_DIR, filename)
 
     if not os.path.exists(filepath):
         header = f"# 周记：{monday.strftime('%Y-%m-%d')} ~ {sunday.strftime('%m-%d')}\n"
@@ -46,8 +50,15 @@ def main():
             f.write(header)
         print(f"Created: {filepath}", file=__import__("sys").stderr)
 
-    # Print path for callers
+    if not os.path.exists(codes_filepath):
+        header = f"# Weekly Code Update: {monday.strftime('%Y-%m-%d')} ~ {sunday.strftime('%m-%d')}\n"
+        with open(codes_filepath, "w") as f:
+            f.write(header)
+        print(f"Created: {codes_filepath}", file=__import__("sys").stderr)
+
+    # Print both paths for callers (line 1: weekly, line 2: codes)
     print(filepath)
+    print(codes_filepath)
 
     # Also print today's section header for convenience
     day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
